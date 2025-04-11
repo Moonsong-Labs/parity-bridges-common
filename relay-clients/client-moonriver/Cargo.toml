@@ -16,6 +16,7 @@ subxt = { workspace = true }
 
 # Bridge dependencies
 
+bp-moonbeam = { workspace = true }
 bp-moonriver = { workspace = true }
 bp-header-chain = { workspace = true }
 bp-messages = { workspace = true }
