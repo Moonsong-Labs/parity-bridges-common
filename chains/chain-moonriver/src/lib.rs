@@ -24,7 +24,10 @@ pub use bp_bridge_hub_cumulus::{
 };
 use bp_messages::{ChainWithMessages, MessageNonce};
 
-pub use bp_moonbeam::{AccountId, Signature, Balance, BlockNumber, Hash, Header, AccountInfoStorageMapKeyProvider, UncheckedExtrinsic};
+pub use bp_moonbeam::{
+	AccountId, AccountInfoStorageMapKeyProvider, Balance, BlockNumber, Hash, Header, Signature,
+	UncheckedExtrinsic,
+};
 
 use bp_runtime::{
 	decl_bridge_finality_runtime_apis, decl_bridge_messages_runtime_apis, Chain, ChainId, Parachain,

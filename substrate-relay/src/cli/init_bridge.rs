@@ -17,8 +17,8 @@
 use crate::bridges::{
 	kusama_polkadot::{
 		kusama_headers_to_bridge_hub_polkadot::KusamaToBridgeHubPolkadotCliBridge,
-		polkadot_headers_to_bridge_hub_kusama::PolkadotToBridgeHubKusamaCliBridge,
 		kusama_headers_to_moonbeam::KusamaToMoonbeamCliBridge,
+		polkadot_headers_to_bridge_hub_kusama::PolkadotToBridgeHubKusamaCliBridge,
 		polkadot_headers_to_moonriver::PolkadotToMoonriverCliBridge,
 	},
 	polkadot_bulletin::{
@@ -223,8 +223,7 @@ impl InitBridge {
 				WestendToBridgeHubRococoCliBridge::init_bridge(self.params),
 			InitBridgeName::PolkadotToMoonriver =>
 				PolkadotToMoonriverCliBridge::init_bridge(self.params),
-			InitBridgeName::KusamaToMoonbeam =>
-				KusamaToMoonbeamCliBridge::init_bridge(self.params),
+			InitBridgeName::KusamaToMoonbeam => KusamaToMoonbeamCliBridge::init_bridge(self.params),
 		}
 		.await
 	}
