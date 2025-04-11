@@ -31,8 +31,6 @@ pub mod api {
 		pub mod account {
 			use super::runtime_types;
 			#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
-			pub struct AccountId20(pub [::core::primitive::u8; 20usize]);
-			#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
 			pub struct EthereumSignature(pub [::core::primitive::u8; 65usize]);
 		}
 		pub mod bounded_collections {
@@ -107,6 +105,10 @@ pub mod api {
 				pub state: runtime_types::bp_messages::lane::LaneState,
 			}
 			#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
+			pub struct InboundMessageDetails {
+				pub dispatch_weight: ::sp_weights::Weight,
+			}
+			#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
 			pub struct MessageKey<_0> {
 				pub lane_id: _0,
 				pub nonce: ::core::primitive::u64,
@@ -124,6 +126,12 @@ pub mod api {
 				pub latest_received_nonce: ::core::primitive::u64,
 				pub latest_generated_nonce: ::core::primitive::u64,
 				pub state: runtime_types::bp_messages::lane::LaneState,
+			}
+			#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
+			pub struct OutboundMessageDetails {
+				pub nonce: ::core::primitive::u64,
+				pub dispatch_weight: ::sp_weights::Weight,
+				pub size: ::core::primitive::u32,
 			}
 			#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
 			pub struct ReceivedMessages<_0, _1> {
@@ -239,6 +247,81 @@ pub mod api {
 			pub enum OwnedBridgeModuleError {
 				#[codec(index = 0)]
 				Halted,
+			}
+		}
+		pub mod bp_xcm_bridge {
+			use super::runtime_types;
+			#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
+			pub struct Bridge {
+				pub bridge_origin_relative_location: ::subxt::ext::subxt_core::alloc::boxed::Box<
+					runtime_types::xcm::VersionedLocation,
+				>,
+				pub bridge_origin_universal_location: ::subxt::ext::subxt_core::alloc::boxed::Box<
+					runtime_types::xcm::VersionedInteriorLocation,
+				>,
+				pub bridge_destination_universal_location:
+					::subxt::ext::subxt_core::alloc::boxed::Box<
+						runtime_types::xcm::VersionedInteriorLocation,
+					>,
+				pub state: runtime_types::bp_xcm_bridge::BridgeState,
+				pub deposit: ::core::option::Option<
+					runtime_types::bp_xcm_bridge::Deposit<
+						::bp_moonbeam::AccountId,
+						::core::primitive::u128,
+					>,
+				>,
+				pub lane_id: ::bp_messages::LegacyLaneId,
+				pub maybe_notify: ::core::option::Option<runtime_types::bp_xcm_bridge::Receiver>,
+			}
+			#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
+			pub struct BridgeId(pub ::subxt::ext::subxt_core::utils::H256);
+			#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
+			pub enum BridgeLocationsError {
+				#[codec(index = 0)]
+				NonUniversalLocation,
+				#[codec(index = 1)]
+				InvalidBridgeOrigin,
+				#[codec(index = 2)]
+				InvalidBridgeDestination,
+				#[codec(index = 3)]
+				DestinationIsLocal,
+				#[codec(index = 4)]
+				UnreachableDestination,
+				#[codec(index = 5)]
+				UnsupportedDestinationLocation,
+				#[codec(index = 6)]
+				UnsupportedXcmVersion,
+				#[codec(index = 7)]
+				UnsupportedLaneIdType,
+			}
+			#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
+			pub enum BridgeState {
+				#[codec(index = 0)]
+				Opened,
+				#[codec(index = 1)]
+				SoftSuspended,
+				#[codec(index = 2)]
+				HardSuspended,
+				#[codec(index = 3)]
+				Closed,
+			}
+			#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
+			pub struct Deposit<_0, _1> {
+				pub account: _0,
+				pub amount: _1,
+			}
+			#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
+			pub struct Receiver {
+				pub pallet_index: ::core::primitive::u8,
+				pub call_index: ::core::primitive::u8,
+			}
+		}
+		pub mod bp_xcm_bridge_router {
+			use super::runtime_types;
+			#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
+			pub struct BridgeState {
+				pub delivery_fee_factor: runtime_types::sp_arithmetic::fixed_point::FixedU128,
+				pub is_congested: ::core::primitive::bool,
 			}
 		}
 		pub mod cumulus_pallet_parachain_system {
@@ -833,13 +916,13 @@ pub mod api {
 			}
 			#[derive(
 				::codec::Decode,
+				::codec::DecodeWithMemTracking,
 				::codec::Encode,
 				Clone,
 				Debug,
 				Eq,
 				PartialEq,
 				scale_info::TypeInfo,
-				sp_core::DecodeWithMemTracking,
 			)]
 			pub enum Mode {
 				#[codec(index = 0)]
@@ -1287,6 +1370,31 @@ pub mod api {
 							),
 						}
 					}
+					pub mod xcm_config {
+						use super::runtime_types;
+						#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
+						pub struct ForeignAssetCreationDeposit;
+						#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
+						pub enum Parameters {
+							#[codec(index = 0)]
+                            ForeignAssetCreationDeposit(
+                                runtime_types::moonbeam_runtime::runtime_params::dynamic_params::xcm_config::ForeignAssetCreationDeposit,
+                                ::core::option::Option<::core::primitive::u128>,
+                            ),
+                        }
+						#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
+						pub enum ParametersKey {
+							#[codec(index = 0)]
+                            ForeignAssetCreationDeposit(
+                                runtime_types::moonbeam_runtime::runtime_params::dynamic_params::xcm_config::ForeignAssetCreationDeposit,
+                            ),
+                        }
+						#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
+						pub enum ParametersValue {
+							#[codec(index = 0)]
+							ForeignAssetCreationDeposit(::core::primitive::u128),
+						}
+					}
 				}
 				#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
 				pub enum RuntimeParameters {
@@ -1297,6 +1405,10 @@ pub mod api {
                     #[codec(index = 1)]
                     PalletRandomness(
                         runtime_types::moonbeam_runtime::runtime_params::dynamic_params::pallet_randomness::Parameters,
+                    ),
+                    #[codec(index = 2)]
+                    XcmConfig(
+                        runtime_types::moonbeam_runtime::runtime_params::dynamic_params::xcm_config::Parameters,
                     ),
                 }
 				#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
@@ -1309,6 +1421,10 @@ pub mod api {
                     PalletRandomness(
                         runtime_types::moonbeam_runtime::runtime_params::dynamic_params::pallet_randomness::ParametersKey,
                     ),
+                    #[codec(index = 2)]
+                    XcmConfig(
+                        runtime_types::moonbeam_runtime::runtime_params::dynamic_params::xcm_config::ParametersKey,
+                    ),
                 }
 				#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
 				pub enum RuntimeParametersValue {
@@ -1319,6 +1435,10 @@ pub mod api {
                     #[codec(index = 1)]
                     PalletRandomness(
                         runtime_types::moonbeam_runtime::runtime_params::dynamic_params::pallet_randomness::ParametersValue,
+                    ),
+                    #[codec(index = 2)]
+                    XcmConfig(
+                        runtime_types::moonbeam_runtime::runtime_params::dynamic_params::xcm_config::ParametersValue,
                     ),
                 }
 			}
@@ -1480,6 +1600,10 @@ pub mod api {
 				BridgeKusamaParachains(runtime_types::pallet_bridge_parachains::pallet::Call),
 				#[codec(index = 132)]
 				BridgeKusamaMessages(runtime_types::pallet_bridge_messages::pallet::Call),
+				#[codec(index = 133)]
+				BridgeXcmOverMoonriver(runtime_types::pallet_xcm_bridge::pallet::Call),
+				#[codec(index = 134)]
+				ToKusamaXcmRouter(runtime_types::pallet_xcm_bridge_router::pallet::Call),
 			}
 			#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
 			pub enum RuntimeError {
@@ -1565,6 +1689,8 @@ pub mod api {
 				BridgeKusamaParachains(runtime_types::pallet_bridge_parachains::pallet::Error),
 				#[codec(index = 132)]
 				BridgeKusamaMessages(runtime_types::pallet_bridge_messages::pallet::Error),
+				#[codec(index = 133)]
+				BridgeXcmOverMoonriver(runtime_types::pallet_xcm_bridge::pallet::Error),
 			}
 			#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
 			pub enum RuntimeEvent {
@@ -1652,11 +1778,17 @@ pub mod api {
 				BridgeKusamaParachains(runtime_types::pallet_bridge_parachains::pallet::Event),
 				#[codec(index = 132)]
 				BridgeKusamaMessages(runtime_types::pallet_bridge_messages::pallet::Event),
+				#[codec(index = 133)]
+				BridgeXcmOverMoonriver(runtime_types::pallet_xcm_bridge::pallet::Event),
+				#[codec(index = 134)]
+				ToKusamaXcmRouter(runtime_types::pallet_xcm_bridge_router::pallet::Event),
 			}
 			#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
 			pub enum RuntimeHoldReason {
 				#[codec(index = 62)]
 				Preimage(runtime_types::pallet_preimage::pallet::HoldReason),
+				#[codec(index = 133)]
+				BridgeXcmOverMoonriver(runtime_types::pallet_xcm_bridge::pallet::HoldReason),
 			}
 		}
 		pub mod moonbeam_runtime_common {
@@ -2786,23 +2918,23 @@ pub mod api {
 				#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
 				pub enum Event {
 					#[codec(index = 0)]
-					MessageAccepted {
-						lane_id: ::bp_messages::LegacyLaneId,
-						nonce: ::core::primitive::u64,
-					},
-					#[codec(index = 1)]
-					MessagesReceived(
-						runtime_types::bp_messages::ReceivedMessages<
-							(),
-							::bp_messages::LegacyLaneId,
-						>,
-					),
-					#[codec(index = 2)]
-					MessagesDelivered {
-						lane_id: ::bp_messages::LegacyLaneId,
-						messages: runtime_types::bp_messages::DeliveredMessages,
-					},
-				}
+                    MessageAccepted {
+                        lane_id: ::bp_messages::LegacyLaneId,
+                        nonce: ::core::primitive::u64,
+                    },
+                    #[codec(index = 1)]
+                    MessagesReceived(
+                        runtime_types::bp_messages::ReceivedMessages<
+                            runtime_types::pallet_xcm_bridge::dispatcher::XcmBlobMessageDispatchResult,
+                            ::bp_messages::LegacyLaneId,
+                        >,
+                    ),
+                    #[codec(index = 2)]
+                    MessagesDelivered {
+                        lane_id: ::bp_messages::LegacyLaneId,
+                        messages: runtime_types::bp_messages::DeliveredMessages,
+                    },
+                }
 			}
 		}
 		pub mod pallet_bridge_parachains {
@@ -4106,11 +4238,18 @@ pub mod api {
 			pub mod pallet {
 				use super::runtime_types;
 				#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
+				pub struct AssetDepositDetails<_0> {
+					pub deposit_account: ::bp_moonbeam::AccountId,
+					pub deposit: ::core::primitive::u128,
+					#[codec(skip)]
+					pub __ignore: ::core::marker::PhantomData<_0>,
+				}
+				#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
 				pub enum Call {
 					#[codec(index = 0)]
 					create_foreign_asset {
 						asset_id: ::core::primitive::u128,
-						xcm_location: runtime_types::staging_xcm::v4::location::Location,
+						asset_xcm_location: runtime_types::staging_xcm::v4::location::Location,
 						decimals: ::core::primitive::u8,
 						symbol: runtime_types::bounded_collections::bounded_vec::BoundedVec<
 							::core::primitive::u8,
@@ -4155,12 +4294,20 @@ pub mod api {
 					#[codec(index = 9)]
 					EvmInternalError,
 					#[codec(index = 10)]
-					InvalidSymbol,
+					InsufficientBalance,
 					#[codec(index = 11)]
-					InvalidTokenName,
+					CannotConvertLocationToAccount,
 					#[codec(index = 12)]
-					LocationAlreadyExists,
+					LocationOutsideOfOrigin,
 					#[codec(index = 13)]
+					AssetNotInSiblingPara,
+					#[codec(index = 14)]
+					InvalidSymbol,
+					#[codec(index = 15)]
+					InvalidTokenName,
+					#[codec(index = 16)]
+					LocationAlreadyExists,
+					#[codec(index = 17)]
 					TooManyForeignAssets,
 				}
 				#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
@@ -4170,10 +4317,12 @@ pub mod api {
 						contract_address: ::subxt::ext::subxt_core::utils::H160,
 						asset_id: ::core::primitive::u128,
 						xcm_location: runtime_types::staging_xcm::v4::location::Location,
+						deposit: ::core::option::Option<::core::primitive::u128>,
 					},
 					#[codec(index = 1)]
 					ForeignAssetXcmLocationChanged {
 						asset_id: ::core::primitive::u128,
+						previous_xcm_location: runtime_types::staging_xcm::v4::location::Location,
 						new_xcm_location: runtime_types::staging_xcm::v4::location::Location,
 					},
 					#[codec(index = 2)]
@@ -4186,6 +4335,12 @@ pub mod api {
 						asset_id: ::core::primitive::u128,
 						xcm_location: runtime_types::staging_xcm::v4::location::Location,
 					},
+					#[codec(index = 4)]
+					TokensLocked(
+						::bp_moonbeam::AccountId,
+						::core::primitive::u128,
+						runtime_types::primitive_types::U256,
+					),
 				}
 			}
 			#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
@@ -4577,9 +4732,7 @@ pub mod api {
                         >,
                     },
                     #[codec(index = 2)]
-                    set_parachain_bond_account {
-                        new: ::bp_moonbeam::AccountId,
-                    },
+                    set_parachain_bond_account { new: ::bp_moonbeam::AccountId },
                     #[codec(index = 3)]
                     set_parachain_bond_reserve_percent {
                         new: runtime_types::sp_arithmetic::per_things::Percent,
@@ -4617,18 +4770,9 @@ pub mod api {
                     #[codec(index = 14)]
                     schedule_candidate_bond_less { less: ::core::primitive::u128 },
                     #[codec(index = 15)]
-                    execute_candidate_bond_less {
-                        candidate: ::bp_moonbeam::AccountId,
-                    },
+                    execute_candidate_bond_less { candidate: ::bp_moonbeam::AccountId },
                     #[codec(index = 16)]
                     cancel_candidate_bond_less,
-                    #[codec(index = 17)]
-                    delegate {
-                        candidate: ::bp_moonbeam::AccountId,
-                        amount: ::core::primitive::u128,
-                        candidate_delegation_count: ::core::primitive::u32,
-                        delegation_count: ::core::primitive::u32,
-                    },
                     #[codec(index = 18)]
                     delegate_with_auto_compound {
                         candidate: ::bp_moonbeam::AccountId,
@@ -4638,16 +4782,8 @@ pub mod api {
                         candidate_auto_compounding_delegation_count: ::core::primitive::u32,
                         delegation_count: ::core::primitive::u32,
                     },
-                    #[codec(index = 19)]
-                    removed_call_19,
-                    #[codec(index = 20)]
-                    removed_call_20,
-                    #[codec(index = 21)]
-                    removed_call_21,
                     #[codec(index = 22)]
-                    schedule_revoke_delegation {
-                        collator: ::bp_moonbeam::AccountId,
-                    },
+                    schedule_revoke_delegation { collator: ::bp_moonbeam::AccountId },
                     #[codec(index = 23)]
                     delegator_bond_more {
                         candidate: ::bp_moonbeam::AccountId,
@@ -4664,9 +4800,7 @@ pub mod api {
                         candidate: ::bp_moonbeam::AccountId,
                     },
                     #[codec(index = 26)]
-                    cancel_delegation_request {
-                        candidate: ::bp_moonbeam::AccountId,
-                    },
+                    cancel_delegation_request { candidate: ::bp_moonbeam::AccountId },
                     #[codec(index = 27)]
                     set_auto_compound {
                         candidate: ::bp_moonbeam::AccountId,
@@ -4681,9 +4815,7 @@ pub mod api {
                         >,
                     },
                     #[codec(index = 29)]
-                    notify_inactive_collator {
-                        collator: ::bp_moonbeam::AccountId,
-                    },
+                    notify_inactive_collator { collator: ::bp_moonbeam::AccountId },
                     #[codec(index = 30)]
                     enable_marking_offline { value: ::core::primitive::bool },
                     #[codec(index = 31)]
@@ -4808,10 +4940,8 @@ pub mod api {
 					#[codec(index = 52)]
 					CannotSetAboveMaxCandidates,
 					#[codec(index = 53)]
-					RemovedCall,
-					#[codec(index = 54)]
 					MarkingOfflineNotEnabled,
-					#[codec(index = 55)]
+					#[codec(index = 54)]
 					CurrentRoundTooLow,
 				}
 				#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
@@ -4854,13 +4984,9 @@ pub mod api {
                         new_bond: ::core::primitive::u128,
                     },
                     #[codec(index = 6)]
-                    CandidateWentOffline {
-                        candidate: ::bp_moonbeam::AccountId,
-                    },
+                    CandidateWentOffline { candidate: ::bp_moonbeam::AccountId },
                     #[codec(index = 7)]
-                    CandidateBackOnline {
-                        candidate: ::bp_moonbeam::AccountId,
-                    },
+                    CandidateBackOnline { candidate: ::bp_moonbeam::AccountId },
                     #[codec(index = 8)]
                     CandidateScheduledExit {
                         exit_allowed_round: ::core::primitive::u32,
@@ -4868,9 +4994,7 @@ pub mod api {
                         scheduled_exit: ::core::primitive::u32,
                     },
                     #[codec(index = 9)]
-                    CancelledCandidateExit {
-                        candidate: ::bp_moonbeam::AccountId,
-                    },
+                    CancelledCandidateExit { candidate: ::bp_moonbeam::AccountId },
                     #[codec(index = 10)]
                     CancelledCandidateBondLess {
                         candidate: ::bp_moonbeam::AccountId,
@@ -4935,9 +5059,7 @@ pub mod api {
                         unstaked_amount: ::core::primitive::u128,
                     },
                     #[codec(index = 20)]
-                    DelegatorExitCancelled {
-                        delegator: ::bp_moonbeam::AccountId,
-                    },
+                    DelegatorExitCancelled { delegator: ::bp_moonbeam::AccountId },
                     #[codec(index = 21)]
                     CancelledDelegationRequest {
                         delegator: ::bp_moonbeam::AccountId,
@@ -6710,6 +6832,155 @@ pub mod api {
 				}
 			}
 		}
+		pub mod pallet_xcm_bridge {
+			use super::runtime_types;
+			pub mod dispatcher {
+				use super::runtime_types;
+				#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
+				pub enum XcmBlobMessageDispatchResult {
+					#[codec(index = 0)]
+					InvalidPayload,
+					#[codec(index = 1)]
+					Dispatched,
+					#[codec(index = 2)]
+					NotDispatched,
+				}
+			}
+			pub mod pallet {
+				use super::runtime_types;
+				#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
+				pub enum Call {
+					#[codec(index = 0)]
+					open_bridge {
+						bridge_destination_universal_location:
+							::subxt::ext::subxt_core::alloc::boxed::Box<
+								runtime_types::xcm::VersionedInteriorLocation,
+							>,
+						maybe_notify:
+							::core::option::Option<runtime_types::bp_xcm_bridge::Receiver>,
+					},
+					#[codec(index = 1)]
+					close_bridge {
+						bridge_destination_universal_location:
+							::subxt::ext::subxt_core::alloc::boxed::Box<
+								runtime_types::xcm::VersionedInteriorLocation,
+							>,
+						may_prune_messages: ::core::primitive::u64,
+					},
+					#[codec(index = 2)]
+					update_notification_receiver {
+						bridge_destination_universal_location:
+							::subxt::ext::subxt_core::alloc::boxed::Box<
+								runtime_types::xcm::VersionedInteriorLocation,
+							>,
+						maybe_notify:
+							::core::option::Option<runtime_types::bp_xcm_bridge::Receiver>,
+					},
+				}
+				#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
+				pub enum Error {
+					#[codec(index = 0)]
+					BridgeLocations(runtime_types::bp_xcm_bridge::BridgeLocationsError),
+					#[codec(index = 1)]
+					InvalidBridgeOriginAccount,
+					#[codec(index = 2)]
+					BridgeAlreadyExists,
+					#[codec(index = 3)]
+					TooManyBridgesForLocalOrigin,
+					#[codec(index = 4)]
+					BridgeAlreadyClosed,
+					#[codec(index = 5)]
+					LanesManager(
+						runtime_types::pallet_bridge_messages::lanes_manager::LanesManagerError,
+					),
+					#[codec(index = 6)]
+					UnknownBridge,
+					#[codec(index = 7)]
+					FailedToReserveBridgeDeposit,
+					#[codec(index = 8)]
+					UnsupportedXcmVersion,
+				}
+				#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
+				pub enum Event {
+					#[codec(index = 0)]
+					BridgeOpened {
+						bridge_id: runtime_types::bp_xcm_bridge::BridgeId,
+						bridge_deposit: ::core::option::Option<
+							runtime_types::bp_xcm_bridge::Deposit<
+								::bp_moonbeam::AccountId,
+								::core::primitive::u128,
+							>,
+						>,
+						local_endpoint: ::subxt::ext::subxt_core::alloc::boxed::Box<
+							runtime_types::staging_xcm::v4::junctions::Junctions,
+						>,
+						remote_endpoint: ::subxt::ext::subxt_core::alloc::boxed::Box<
+							runtime_types::staging_xcm::v4::junctions::Junctions,
+						>,
+						lane_id: ::bp_messages::LegacyLaneId,
+					},
+					#[codec(index = 1)]
+					ClosingBridge {
+						bridge_id: runtime_types::bp_xcm_bridge::BridgeId,
+						lane_id: ::bp_messages::LegacyLaneId,
+						pruned_messages: ::core::primitive::u64,
+						enqueued_messages: ::core::primitive::u64,
+					},
+					#[codec(index = 2)]
+					BridgePruned {
+						bridge_id: runtime_types::bp_xcm_bridge::BridgeId,
+						lane_id: ::bp_messages::LegacyLaneId,
+						bridge_deposit: ::core::option::Option<
+							runtime_types::bp_xcm_bridge::Deposit<
+								::bp_moonbeam::AccountId,
+								::core::primitive::u128,
+							>,
+						>,
+						pruned_messages: ::core::primitive::u64,
+					},
+					#[codec(index = 3)]
+					NotificationReceiverUpdated {
+						bridge_id: runtime_types::bp_xcm_bridge::BridgeId,
+						maybe_notify:
+							::core::option::Option<runtime_types::bp_xcm_bridge::Receiver>,
+					},
+				}
+				#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
+				pub enum HoldReason {
+					#[codec(index = 0)]
+					BridgeDeposit,
+				}
+			}
+		}
+		pub mod pallet_xcm_bridge_router {
+			use super::runtime_types;
+			pub mod pallet {
+				use super::runtime_types;
+				#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
+				pub enum Call {
+					#[codec(index = 0)]
+					update_bridge_status {
+						bridge_id: runtime_types::bp_xcm_bridge::BridgeId,
+						is_congested: ::core::primitive::bool,
+					},
+				}
+				#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
+				pub enum Event {
+					#[codec(index = 0)]
+					DeliveryFeeFactorDecreased {
+						previous_value: runtime_types::sp_arithmetic::fixed_point::FixedU128,
+						new_value: runtime_types::sp_arithmetic::fixed_point::FixedU128,
+						bridge_id: runtime_types::bp_xcm_bridge::BridgeId,
+					},
+					#[codec(index = 1)]
+					DeliveryFeeFactorIncreased {
+						previous_value: runtime_types::sp_arithmetic::fixed_point::FixedU128,
+						new_value: runtime_types::sp_arithmetic::fixed_point::FixedU128,
+						bridge_id: runtime_types::bp_xcm_bridge::BridgeId,
+					},
+				}
+			}
+		}
 		pub mod pallet_xcm_transactor {
 			use super::runtime_types;
 			pub mod pallet {
@@ -6881,9 +7152,7 @@ pub mod api {
                     },
                     #[codec(index = 1)]
                     TransactedSovereign {
-                        fee_payer: ::core::option::Option<
-                            ::bp_moonbeam::AccountId,
-                        >,
+                        fee_payer: ::core::option::Option<::bp_moonbeam::AccountId>,
                         dest: runtime_types::staging_xcm::v4::location::Location,
                         call: ::subxt::ext::subxt_core::alloc::vec::Vec<
                             ::core::primitive::u8,
@@ -9188,6 +9457,15 @@ pub mod api {
 				V3(runtime_types::xcm::v3::multiasset::MultiAssets),
 				#[codec(index = 4)]
 				V4(runtime_types::staging_xcm::v4::asset::Assets),
+			}
+			#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
+			pub enum VersionedInteriorLocation {
+				#[codec(index = 2)]
+				V2(runtime_types::xcm::v2::multilocation::Junctions),
+				#[codec(index = 3)]
+				V3(runtime_types::xcm::v3::junctions::Junctions),
+				#[codec(index = 4)]
+				V4(runtime_types::staging_xcm::v4::junctions::Junctions),
 			}
 			#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
 			pub enum VersionedLocation {

@@ -7699,6 +7699,7 @@ version = "0.1.0"
 dependencies = [
  "bp-header-chain",
  "bp-messages",
+ "bp-moonbeam",
  "bp-moonriver",
  "bp-polkadot-bulletin",
  "bp-polkadot-core",

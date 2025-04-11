@@ -116,21 +116,23 @@ impl ChainWithTransactions for Moonriver {
 			),
 		)?;
 
-		let signature = raw_payload.using_encoded(|payload| {
-			// Moonbeam signer process hashes the message twice
-			// 1. blake2_256
-			// 2. keccak_256
-			let mut h: [u8; 32] = [0u8; 32];
-			h.copy_from_slice(keccak_256(payload).as_slice());
-			param.signer.sign_prehashed(&h)
-		});
-		let signer: sp_runtime::MultiSigner = param.signer.public().into();
+		let signature: bp_moonriver::Signature = raw_payload
+			.using_encoded(|payload| {
+				// Moonbeam signer hashes the message twice
+				// 1. blake2_256
+				// 2. keccak_256
+				let mut h: [u8; 32] = [0u8; 32];
+				h.copy_from_slice(keccak_256(payload).as_slice());
+				param.signer.sign_prehashed(&h)
+			})
+			.into();
+		let signer = param.signer.public();
 		let (call, extra, _) = raw_payload.deconstruct();
 
-		Ok(UncheckedExtrinsic::new_signed(
+		Ok(Self::SignedTransaction::new_signed(
 			call.deconstruct(),
 			signer.into_account().into(),
-			signature.into(),
+			signature,
 			extra,
 		))
 	}
@@ -145,5 +147,5 @@ impl ChainWithMessages for Moonriver {
 
 impl ChainWithRuntimeVersion for Moonriver {
 	const RUNTIME_VERSION: Option<SimpleRuntimeVersion> =
-		Some(SimpleRuntimeVersion { spec_version: 3_600, transaction_version: 3 });
+		Some(SimpleRuntimeVersion { spec_version: 3_700, transaction_version: 3 });
 }
