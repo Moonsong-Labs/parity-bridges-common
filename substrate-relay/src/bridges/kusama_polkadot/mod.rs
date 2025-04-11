@@ -21,4 +21,6 @@ pub mod bridge_hub_kusama_parachains_to_bridge_hub_polkadot;
 pub mod bridge_hub_polkadot_messages_to_bridge_hub_kusama;
 pub mod bridge_hub_polkadot_parachains_to_bridge_hub_kusama;
 pub mod kusama_headers_to_bridge_hub_polkadot;
+pub mod kusama_headers_to_moonbeam;
 pub mod polkadot_headers_to_bridge_hub_kusama;
+pub mod polkadot_headers_to_moonriver;

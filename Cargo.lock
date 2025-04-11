@@ -10165,6 +10165,8 @@ dependencies = [
  "relay-bridge-hub-westend-client",
  "relay-kusama-client",
  "relay-moonbase-client",
+ "relay-moonbeam-client",
+ "relay-moonriver-client",
  "relay-polkadot-bulletin-client",
  "relay-polkadot-client",
  "relay-rococo-client",
