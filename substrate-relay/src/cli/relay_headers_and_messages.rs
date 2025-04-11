@@ -120,7 +120,7 @@ declare_chain_cli_schema!(RococoParachainsToRococoBulletin, rococo_parachains_to
 // All supported bridges.
 declare_parachain_to_parachain_bridge_schema!(BridgeHubRococo, Rococo, BridgeHubWestend, Westend);
 declare_parachain_to_parachain_bridge_schema!(BridgeHubKusama, Kusama, BridgeHubPolkadot, Polkadot);
-declare_parachain_to_parachain_bridge_schema!(Moonbeam, Polkadot, Moonriver, Kusama);
+declare_parachain_to_parachain_bridge_schema!(Moonriver, Kusama, Moonbeam, Polkadot);
 declare_relay_to_parachain_bridge_schema!(PolkadotBulletin, BridgeHubPolkadot, Polkadot);
 declare_relay_to_parachain_bridge_schema!(RococoBulletin, BridgeHubRococo, Rococo);
 
@@ -266,7 +266,7 @@ pub enum RelayHeadersAndMessages {
 	/// BridgeHubRococo <> BridgeHubWestend relay.
 	BridgeHubRococoBridgeHubWestend(BridgeHubRococoBridgeHubWestendHeadersAndMessages),
 	/// Moonbeam <> Moonriver relay
-	MoonbeamMoonriver(MoonbeamMoonriverHeadersAndMessages),
+	MoonbeamMoonriver(MoonriverMoonbeamHeadersAndMessages),
 }
 
 impl RelayHeadersAndMessages {
