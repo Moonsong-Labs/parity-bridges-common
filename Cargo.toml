@@ -18,8 +18,12 @@ members = [
 	"relay-clients/client-polkadot-bulletin",
 	"relay-clients/client-rococo",
 	"relay-clients/client-westend",
+	"relay-clients/client-moonbeam",
+	"relay-clients/client-moonriver",
 	"chains/chain-bridge-hub-polkadot",
 	"chains/chain-bridge-hub-kusama",
+	"chains/chain-moonriver",
+	"chains/chain-moonbeam",
 	"chains/chain-polkadot",
 	"chains/chain-kusama",
 	"substrate-relay",
@@ -81,6 +85,8 @@ bp-parachains = { git = "https://github.com/paritytech/polkadot-sdk", branch = "
 bp-polkadot = { path = "./chains/chain-polkadot" }
 bp-polkadot-core = { git = "https://github.com/paritytech/polkadot-sdk", branch = "master" }
 bp-kusama = { path = "./chains/chain-kusama" }
+bp-moonriver = { path = "./chains/chain-moonriver" }
+bp-moonbeam = { path = "./chains/chain-moonbeam" }
 bp-runtime = { git = "https://github.com/paritytech/polkadot-sdk", branch = "master" }
 bridge-runtime-common = { git = "https://github.com/paritytech/polkadot-sdk", branch = "master" }
 relay-substrate-client = { git = "https://github.com/paritytech/polkadot-sdk", branch = "master" }
@@ -128,6 +134,8 @@ relay-polkadot-client = { path = "./relay-clients/client-polkadot" }
 relay-polkadot-bulletin-client = { path = "./relay-clients/client-polkadot-bulletin" }
 relay-rococo-client = { path = "./relay-clients/client-rococo" }
 relay-westend-client = { path = "./relay-clients/client-westend" }
+relay-moonbeam-client = { path = "./relay-clients/client-moonbeam" }
+relay-moonriver-client = { path = "./relay-clients/client-moonriver" }
 substrate-relay-helper = { git = "https://github.com/paritytech/polkadot-sdk", branch = "master" }
 bp-test-utils = { git = "https://github.com/paritytech/polkadot-sdk", branch = "master" }
 hex-literal = "0.4"
