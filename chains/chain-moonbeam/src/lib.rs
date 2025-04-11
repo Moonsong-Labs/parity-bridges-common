@@ -114,7 +114,7 @@ frame_support::parameter_types! {
 	pub const BaseConfirmationFeeInGlmr: u128 = 575_036_072;
 }
 
-/// Compute the total estimated fee that needs to be paid in GLMR by the sender when sending
+/// Compute the total estimated fee that needs to be paid in `GLMR` by the sender when sending
 /// message from Moonbeam to Moonriver.
 pub fn estimate_moonbeam_to_moonriver_message_fee(
 	moonriver_base_delivery_fee_in_umovr: Balance,
@@ -132,7 +132,7 @@ pub fn estimate_moonbeam_to_moonriver_message_fee(
 		.saturating_add(BaseConfirmationFeeInGlmr::get())
 }
 
-/// Compute the per-byte fee that needs to be paid in GLMRs by the sender when sending
+/// Compute the per-byte fee that needs to be paid in `GLMRs`` by the sender when sending
 /// message from Moonbeam to Moonriver.
 pub fn estimate_moonbeam_to_moonriver_byte_fee() -> Balance {
 	// the sender pays for the same byte twice:
@@ -148,7 +148,7 @@ pub fn estimate_moonbeam_to_moonriver_byte_fee() -> Balance {
 	convert_from_umovr_to_uglmr(MOONRIVER_TRANSACTION_BYTE_FEE)
 }
 
-/// Convert from uMOVRs to uGLMRs.
+/// Convert from `uMOVRs` to `uGLMRs``.
 fn convert_from_umovr_to_uglmr(price_in_umovr: Balance) -> Balance {
 	// assuming exchange rate is 5 MOVR for 1 GLMR
 	let ksm_to_dot_economic_rate = FixedU128::from_rational(1, 5);

@@ -116,16 +116,14 @@ impl ChainWithTransactions for Moonriver {
 			),
 		)?;
 
-		let signature: bp_moonriver::Signature = raw_payload
-			.using_encoded(|payload| {
-				// Moonbeam signer process hashes the message twice
-				// 1. blake2_256
-				// 2. keccak_256
-				let mut h: [u8; 32] = [0u8; 32];
-				h.copy_from_slice(keccak_256(payload).as_slice());
-				param.signer.sign_prehashed(&h)
-			})
-			.into();
+		let signature = raw_payload.using_encoded(|payload| {
+			// Moonbeam signer process hashes the message twice
+			// 1. blake2_256
+			// 2. keccak_256
+			let mut h: [u8; 32] = [0u8; 32];
+			h.copy_from_slice(keccak_256(payload).as_slice());
+			param.signer.sign_prehashed(&h)
+		});
 		let signer: sp_runtime::MultiSigner = param.signer.public().into();
 		let (call, extra, _) = raw_payload.deconstruct();
 
