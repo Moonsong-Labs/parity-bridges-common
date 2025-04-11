@@ -21,6 +21,12 @@ pub mod bridge_hub_kusama_parachains_to_bridge_hub_polkadot;
 pub mod bridge_hub_polkadot_messages_to_bridge_hub_kusama;
 pub mod bridge_hub_polkadot_parachains_to_bridge_hub_kusama;
 pub mod kusama_headers_to_bridge_hub_polkadot;
-pub mod kusama_headers_to_moonbeam;
 pub mod polkadot_headers_to_bridge_hub_kusama;
+
+// Moonbeam <> Moonriver modules
+pub mod kusama_headers_to_moonbeam;
+pub mod kusama_parachains_to_moonbeam_polkadot;
+pub mod moonbeam_polkadot_messages_to_moonriver_kusama;
+pub mod moonriver_kusama_messages_to_moonbeam_polkadot;
 pub mod polkadot_headers_to_moonriver;
+pub mod polkadot_parachains_to_moonriver_kusama;
