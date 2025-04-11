@@ -30,6 +30,8 @@ use crate::bridges::{
 	kusama_polkadot::{
 		bridge_hub_kusama_parachains_to_bridge_hub_polkadot::BridgeHubKusamaToBridgeHubPolkadotCliBridge,
 		bridge_hub_polkadot_parachains_to_bridge_hub_kusama::BridgeHubPolkadotToBridgeHubKusamaCliBridge,
+		kusama_parachains_to_moonbeam_polkadot::MoonriverToMoonbeamCliBridge,
+		polkadot_parachains_to_moonriver_kusama::MoonbeamToMoonriverCliBridge,
 	},
 	polkadot_bulletin::{
 		polkadot_bulletin_headers_to_bridge_hub_polkadot::PolkadotBulletinToBridgeHubPolkadotCliBridge,
@@ -82,6 +84,8 @@ declare_chain_cli_schema!(Betanet, betanet);
 declare_chain_cli_schema!(BetanetRelay, betanet_relay);
 declare_chain_cli_schema!(Stagenet, stagenet);
 declare_chain_cli_schema!(StagenetRelay, stagenet_relay);
+declare_chain_cli_schema!(Moonbeam, moonbeam);
+declare_chain_cli_schema!(Moonriver, moonriver);
 // Means to override signers of different layer transactions.
 declare_chain_cli_schema!(RococoHeadersToBridgeHubWestend, rococo_headers_to_bridge_hub_westend);
 declare_chain_cli_schema!(
@@ -122,6 +126,7 @@ declare_chain_cli_schema!(RococoParachainsToRococoBulletin, rococo_parachains_to
 declare_parachain_to_parachain_bridge_schema!(BridgeHubRococo, Rococo, BridgeHubWestend, Westend);
 declare_parachain_to_parachain_bridge_schema!(BridgeHubKusama, Kusama, BridgeHubPolkadot, Polkadot);
 declare_parachain_to_parachain_bridge_schema!(Betanet, BetanetRelay, Stagenet, StagenetRelay);
+declare_parachain_to_parachain_bridge_schema!(Moonbeam, Polkadot, Moonriver, Kusama);
 declare_relay_to_parachain_bridge_schema!(PolkadotBulletin, BridgeHubPolkadot, Polkadot);
 declare_relay_to_parachain_bridge_schema!(RococoBulletin, BridgeHubRococo, Rococo);
 
@@ -137,6 +142,32 @@ impl Full2WayBridge for StagenetBetanetFull2WayBridge {
 	type Right = relay_moonbase_client::stagenet::Stagenet;
 	type L2R = betanet_parachains_to_stagenet::CliBridge;
 	type R2L = stagenet_parachains_to_betanet::CliBridge;
+
+	fn new(base: Self::Base) -> anyhow::Result<Self> {
+		Ok(Self { base })
+	}
+
+	fn base(&self) -> &Self::Base {
+		&self.base
+	}
+
+	fn mut_base(&mut self) -> &mut Self::Base {
+		&mut self.base
+	}
+}
+
+/// Moonbeam <> Moonbeam complex relay.
+pub struct MoonriverMoonbeamFull2WayBridge {
+	base: <Self as Full2WayBridge>::Base,
+}
+
+#[async_trait]
+impl Full2WayBridge for MoonriverMoonbeamFull2WayBridge {
+	type Base = ParachainToParachainBridge<Self::L2R, Self::R2L>;
+	type Left = relay_moonbeam_client::Moonbeam;
+	type Right = relay_moonriver_client::Moonriver;
+	type L2R = MoonbeamToMoonriverCliBridge;
+	type R2L = MoonriverToMoonbeamCliBridge;
 
 	fn new(base: Self::Base) -> anyhow::Result<Self> {
 		Ok(Self { base })
@@ -268,6 +299,8 @@ pub enum RelayHeadersAndMessages {
 	BridgeHubRococoBridgeHubWestend(BridgeHubRococoBridgeHubWestendHeadersAndMessages),
 	/// Betanet <> Stagenet relay
 	BetanetStagenet(BetanetStagenetHeadersAndMessages),
+	/// Moonbeam <> Moonriver relay
+	MoonbeamMoonriver(MoonbeamMoonriverHeadersAndMessages),
 }
 
 impl RelayHeadersAndMessages {
@@ -292,6 +325,8 @@ impl RelayHeadersAndMessages {
 					.await,
 			RelayHeadersAndMessages::BetanetStagenet(params) =>
 				StagenetBetanetFull2WayBridge::new(params.into_bridge().await?)?.run().await,
+			RelayHeadersAndMessages::MoonbeamMoonriver(params) =>
+				MoonriverMoonbeamFull2WayBridge::new(params.into_bridge().await?)?.run().await,
 		}
 	}
 }
