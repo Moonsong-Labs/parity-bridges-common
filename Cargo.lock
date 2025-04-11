@@ -1264,6 +1264,28 @@ dependencies = [
 ]
 
 [[package]]
+name = "bp-moonbase"
+version = "0.6.0"
+dependencies = [
+ "bp-bridge-hub-cumulus",
+ "bp-messages",
+ "bp-runtime",
+ "frame-support",
+ "impl-serde 0.4.0",
+ "libsecp256k1",
+ "log",
+ "parity-scale-codec",
+ "scale-info",
+ "serde",
+ "sha3",
+ "sp-api",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
 name = "bp-parachains"
 version = "0.7.0"
 source = "git+https://github.com/paritytech/polkadot-sdk?branch=master#9601363f6a8b88510cb38782dd77f08778da5fb7"
@@ -3965,6 +3987,15 @@ dependencies = [
  "integer-sqrt",
  "num-traits",
  "uint 0.10.0",
+]
+
+[[package]]
+name = "impl-serde"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ebc88fc67028ae3db0c853baa36269d398d5f45b6982f95549ff5def78c935cd"
+dependencies = [
+ "serde",
 ]
 
 [[package]]
@@ -6896,7 +6927,7 @@ dependencies = [
  "fixed-hash",
  "impl-codec",
  "impl-num-traits",
- "impl-serde",
+ "impl-serde 0.5.0",
  "scale-info",
  "uint 0.10.0",
 ]
@@ -7613,6 +7644,29 @@ dependencies = [
  "bp-kusama",
  "bp-polkadot-core",
  "bp-runtime",
+ "parity-scale-codec",
+ "relay-substrate-client",
+ "relay-utils",
+ "scale-info",
+ "sp-consensus-grandpa",
+ "sp-core",
+ "sp-runtime",
+ "sp-session",
+ "sp-weights",
+ "subxt",
+]
+
+[[package]]
+name = "relay-moonbase-client"
+version = "0.1.0"
+dependencies = [
+ "bp-header-chain",
+ "bp-messages",
+ "bp-moonbase",
+ "bp-polkadot-bulletin",
+ "bp-polkadot-core",
+ "bp-runtime",
+ "bridge-runtime-common",
  "parity-scale-codec",
  "relay-substrate-client",
  "relay-utils",
@@ -9295,7 +9349,7 @@ dependencies = [
  "futures",
  "hash-db",
  "hash256-std-hasher",
- "impl-serde",
+ "impl-serde 0.5.0",
  "itertools 0.11.0",
  "k256",
  "libsecp256k1",
@@ -9671,7 +9725,7 @@ name = "sp-storage"
 version = "19.0.0"
 source = "git+https://github.com/paritytech/polkadot-sdk?branch=master#9601363f6a8b88510cb38782dd77f08778da5fb7"
 dependencies = [
- "impl-serde",
+ "impl-serde 0.5.0",
  "parity-scale-codec",
  "ref-cast",
  "serde",
@@ -9737,7 +9791,7 @@ name = "sp-version"
 version = "29.0.0"
 source = "git+https://github.com/paritytech/polkadot-sdk?branch=master#9601363f6a8b88510cb38782dd77f08778da5fb7"
 dependencies = [
- "impl-serde",
+ "impl-serde 0.5.0",
  "parity-scale-codec",
  "parity-wasm",
  "scale-info",
@@ -9998,6 +10052,7 @@ dependencies = [
  "bp-bridge-hub-rococo",
  "bp-header-chain",
  "bp-messages",
+ "bp-moonbase",
  "bp-parachains",
  "bp-polkadot",
  "bp-polkadot-bulletin",
@@ -10027,6 +10082,7 @@ dependencies = [
  "relay-bridge-hub-rococo-client",
  "relay-bridge-hub-westend-client",
  "relay-kusama-client",
+ "relay-moonbase-client",
  "relay-polkadot-bulletin-client",
  "relay-polkadot-client",
  "relay-rococo-client",
@@ -10109,7 +10165,7 @@ dependencies = [
  "frame-metadata 18.0.0",
  "futures",
  "hex",
- "impl-serde",
+ "impl-serde 0.5.0",
  "jsonrpsee",
  "parity-scale-codec",
  "primitive-types",
@@ -10163,7 +10219,7 @@ dependencies = [
  "frame-metadata 18.0.0",
  "hashbrown 0.14.5",
  "hex",
- "impl-serde",
+ "impl-serde 0.5.0",
  "keccak-hash",
  "parity-scale-codec",
  "primitive-types",

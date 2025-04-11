@@ -149,6 +149,34 @@ impl BridgeInitializer for RococoBulletinToBridgeHubRococoCliBridge {
 	}
 }
 
+impl BridgeInitializer
+	for crate::bridges::stagenet_alphanet::betanet_relay_headers_to_stagenet::CliBridge
+{
+	type Engine = GrandpaFinalityEngine<Self::Source>;
+
+	fn encode_init_bridge(
+		init_data: <Self::Engine as Engine<Self::Source>>::InitializationData,
+	) -> <Self::Target as Chain>::Call {
+		relay_moonbase_client::RuntimeCall::BridgeGrandpa(
+			relay_moonbase_client::BridgeGrandpaCall::initialize { init_data },
+		)
+	}
+}
+
+impl BridgeInitializer
+	for crate::bridges::stagenet_alphanet::stagenet_relay_headers_to_betanet::CliBridge
+{
+	type Engine = GrandpaFinalityEngine<Self::Source>;
+
+	fn encode_init_bridge(
+		init_data: <Self::Engine as Engine<Self::Source>>::InitializationData,
+	) -> <Self::Target as Chain>::Call {
+		relay_moonbase_client::RuntimeCall::BridgeGrandpa(
+			relay_moonbase_client::BridgeGrandpaCall::initialize { init_data },
+		)
+	}
+}
+
 /// Initialize bridge pallet.
 #[derive(Parser)]
 pub struct InitBridge {
@@ -171,6 +199,8 @@ pub enum InitBridgeName {
 	RococoBulletinToBridgeHubRococo,
 	RococoToBridgeHubWestend,
 	WestendToBridgeHubRococo,
+	StagenetToBetanet,
+	BetanetToStagenet,
 }
 
 impl InitBridge {
@@ -193,6 +223,10 @@ impl InitBridge {
 				RococoToBridgeHubWestendCliBridge::init_bridge(self.params),
 			InitBridgeName::WestendToBridgeHubRococo =>
 				WestendToBridgeHubRococoCliBridge::init_bridge(self.params),
+			InitBridgeName::StagenetToBetanet =>
+				crate::bridges::stagenet_alphanet::stagenet_relay_headers_to_betanet::CliBridge::init_bridge(self.params),
+			InitBridgeName::BetanetToStagenet =>
+				crate::bridges::stagenet_alphanet::betanet_relay_headers_to_stagenet::CliBridge::init_bridge(self.params),
 		}
 		.await
 	}
