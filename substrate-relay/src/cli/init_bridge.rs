@@ -18,6 +18,8 @@ use crate::bridges::{
 	kusama_polkadot::{
 		kusama_headers_to_bridge_hub_polkadot::KusamaToBridgeHubPolkadotCliBridge,
 		polkadot_headers_to_bridge_hub_kusama::PolkadotToBridgeHubKusamaCliBridge,
+		kusama_headers_to_moonbeam::KusamaToMoonbeamCliBridge,
+		polkadot_headers_to_moonriver::PolkadotToMoonriverCliBridge,
 	},
 	polkadot_bulletin::{
 		polkadot_bulletin_headers_to_bridge_hub_polkadot::PolkadotBulletinToBridgeHubPolkadotCliBridge,
@@ -149,6 +151,30 @@ impl BridgeInitializer for RococoBulletinToBridgeHubRococoCliBridge {
 	}
 }
 
+impl BridgeInitializer for PolkadotToMoonriverCliBridge {
+	type Engine = GrandpaFinalityEngine<Self::Source>;
+
+	fn encode_init_bridge(
+		init_data: <Self::Engine as Engine<Self::Source>>::InitializationData,
+	) -> <Self::Target as Chain>::Call {
+		relay_moonriver_client::RuntimeCall::BridgePolkadotGrandpa(
+			relay_moonriver_client::BridgeGrandpaCall::initialize { init_data },
+		)
+	}
+}
+
+impl BridgeInitializer for KusamaToMoonbeamCliBridge {
+	type Engine = GrandpaFinalityEngine<Self::Source>;
+
+	fn encode_init_bridge(
+		init_data: <Self::Engine as Engine<Self::Source>>::InitializationData,
+	) -> <Self::Target as Chain>::Call {
+		relay_moonbeam_client::RuntimeCall::BridgeKusamaGrandpa(
+			relay_moonbeam_client::BridgeGrandpaCall::initialize { init_data },
+		)
+	}
+}
+
 /// Initialize bridge pallet.
 #[derive(Parser)]
 pub struct InitBridge {
@@ -171,6 +197,8 @@ pub enum InitBridgeName {
 	RococoBulletinToBridgeHubRococo,
 	RococoToBridgeHubWestend,
 	WestendToBridgeHubRococo,
+	PolkadotToMoonriver,
+	KusamaToMoonbeam,
 }
 
 impl InitBridge {
@@ -193,6 +221,10 @@ impl InitBridge {
 				RococoToBridgeHubWestendCliBridge::init_bridge(self.params),
 			InitBridgeName::WestendToBridgeHubRococo =>
 				WestendToBridgeHubRococoCliBridge::init_bridge(self.params),
+			InitBridgeName::PolkadotToMoonriver =>
+				PolkadotToMoonriverCliBridge::init_bridge(self.params),
+			InitBridgeName::KusamaToMoonbeam =>
+				KusamaToMoonbeamCliBridge::init_bridge(self.params),
 		}
 		.await
 	}
