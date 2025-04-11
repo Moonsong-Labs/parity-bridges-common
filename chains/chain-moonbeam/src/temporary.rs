@@ -14,14 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moonbeam.  If not, see <http://www.gnu.org/licenses/>.
 
+use bp_runtime::{EncodedOrDecodedCall, StorageMapKeyProvider};
+use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use frame_support::Blake2_128Concat;
-use sp_core::{ecdsa, storage::StorageKey, RuntimeDebug, H160};
-use codec::{Decode, Encode, DecodeWithMemTracking, MaxEncodedLen};
 use scale_info::TypeInfo;
 use serde::{Deserialize, Serialize};
 use sha3::{Digest, Keccak256};
+use sp_core::{ecdsa, storage::StorageKey, RuntimeDebug, H160};
 use sp_runtime::{generic, traits::BlakeTwo256};
-use bp_runtime::{EncodedOrDecodedCall, StorageMapKeyProvider};
 
 pub type AccountId = AccountId20;
 /// Balance of an account.
@@ -34,7 +34,18 @@ pub type Hash = sp_core::H256;
 pub type Header = generic::Header<BlockNumber, BlakeTwo256>;
 
 #[derive(
-	Eq, PartialEq, Copy, Clone, Encode, Decode, TypeInfo, MaxEncodedLen, Default, PartialOrd, Ord, DecodeWithMemTracking
+	Eq,
+	PartialEq,
+	Copy,
+	Clone,
+	Encode,
+	Decode,
+	TypeInfo,
+	MaxEncodedLen,
+	Default,
+	PartialOrd,
+	Ord,
+	DecodeWithMemTracking,
 )]
 pub struct AccountId20(pub [u8; 20]);
 
@@ -102,9 +113,7 @@ impl From<AccountId20> for H160 {
 impl std::str::FromStr for AccountId20 {
 	type Err = &'static str;
 	fn from_str(input: &str) -> Result<Self, Self::Err> {
-		H160::from_str(input)
-			.map(Into::into)
-			.map_err(|_| "invalid hex address.")
+		H160::from_str(input).map(Into::into).map_err(|_| "invalid hex address.")
 	}
 }
 
@@ -124,7 +133,16 @@ impl From<ecdsa::Public> for AccountId20 {
 }
 
 #[derive(
-	Eq, PartialEq, Clone, Encode, Decode, RuntimeDebug, TypeInfo, Serialize, Deserialize, DecodeWithMemTracking
+	Eq,
+	PartialEq,
+	Clone,
+	Encode,
+	Decode,
+	RuntimeDebug,
+	TypeInfo,
+	Serialize,
+	Deserialize,
+	DecodeWithMemTracking,
 )]
 pub struct Signature(ecdsa::Signature);
 
@@ -139,15 +157,14 @@ impl From<sp_runtime::MultiSignature> for Signature {
 		match signature {
 			sp_runtime::MultiSignature::Ed25519(_) => {
 				panic!("Ed25519 not supported for EthereumSignature")
-			}
+			},
 			sp_runtime::MultiSignature::Sr25519(_) => {
 				panic!("Sr25519 not supported for EthereumSignature")
-			}
+			},
 			sp_runtime::MultiSignature::Ecdsa(sig) => Self(sig),
 		}
 	}
 }
-
 
 impl sp_runtime::traits::Verify for Signature {
 	type Signer = EthereumSigner;
@@ -155,22 +172,21 @@ impl sp_runtime::traits::Verify for Signature {
 		let mut m = [0u8; 32];
 		m.copy_from_slice(Keccak256::digest(msg.get()).as_slice());
 		match sp_io::crypto::secp256k1_ecdsa_recover(self.0.as_ref(), &m) {
-			Ok(pubkey) => {
-				AccountId20(H160::from_slice(&Keccak256::digest(pubkey).as_slice()[12..32]).0)
-					== *signer
-			}
+			Ok(pubkey) =>
+				AccountId20(H160::from_slice(&Keccak256::digest(pubkey).as_slice()[12..32]).0) ==
+					*signer,
 			Err(sp_io::EcdsaVerifyError::BadRS) => {
 				log::error!(target: "evm", "Error recovering: Incorrect value of R or S");
 				false
-			}
+			},
 			Err(sp_io::EcdsaVerifyError::BadV) => {
 				log::error!(target: "evm", "Error recovering: Incorrect value of V");
 				false
-			}
+			},
 			Err(sp_io::EcdsaVerifyError::BadSignature) => {
 				log::error!(target: "evm", "Error recovering: Invalid signature");
 				false
-			}
+			},
 		}
 	}
 }

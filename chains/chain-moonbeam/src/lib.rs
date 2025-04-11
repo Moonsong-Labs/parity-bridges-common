@@ -32,7 +32,10 @@ use sp_runtime::{FixedPointNumber, FixedU128, Saturating, StateVersion};
 
 // TODO: Temporary, remove once moonbeam has been updated to stable2503
 mod temporary;
-pub use temporary::{AccountId, Signature, Balance, BlockNumber, Hash, Header, AccountInfoStorageMapKeyProvider, UncheckedExtrinsic};
+pub use temporary::{
+	AccountId, AccountInfoStorageMapKeyProvider, Balance, BlockNumber, Hash, Header, Signature,
+	UncheckedExtrinsic,
+};
 
 /// Moonbeam parachain.
 pub struct Moonbeam;
@@ -125,9 +128,7 @@ pub fn estimate_moonbeam_to_moonriver_message_fee(
 	//
 	// 3) the approximate cost of Polkadot -> Kusama message confirmation transaction on Moonbeam.
 	BaseXcmFeeInGlmr::get()
-		.saturating_add(convert_from_umovr_to_uglmr(
-			moonriver_base_delivery_fee_in_umovr,
-		))
+		.saturating_add(convert_from_umovr_to_uglmr(moonriver_base_delivery_fee_in_umovr))
 		.saturating_add(BaseConfirmationFeeInGlmr::get())
 }
 
@@ -137,8 +138,8 @@ pub fn estimate_moonbeam_to_moonriver_byte_fee() -> Balance {
 	// the sender pays for the same byte twice:
 	// 1) the first part comes from the HRMP, when message travels from Moonbeam to Moonriver;
 	// 2) the second part is the payment for bytes of the message delivery transaction, which is
-	//    "mined" at Moonriver. Hence, we need to use byte fees from that chain and
-	//    convert it to GLMRs here.
+	//    "mined" at Moonriver. Hence, we need to use byte fees from that chain and convert it to
+	//    GLMRs here.
 
 	// TODO: move this to a constants crate per runtime
 	// Similar to: system_parachains_constants::polkadot::fee::TRANSACTION_BYTE_FEE
@@ -154,6 +155,6 @@ fn convert_from_umovr_to_uglmr(price_in_umovr: Balance) -> Balance {
 
 	ksm_to_dot_economic_rate
 		.saturating_mul(FixedU128::saturating_from_integer(price_in_umovr))
-		.into_inner()
-		/ FixedU128::DIV
+		.into_inner() /
+		FixedU128::DIV
 }

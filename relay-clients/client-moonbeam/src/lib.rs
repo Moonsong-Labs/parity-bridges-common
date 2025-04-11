@@ -53,8 +53,7 @@ pub type RuntimeCall = runtime_types::moonbeam_runtime::RuntimeCall;
 pub type BridgeMessagesCall = runtime_types::pallet_bridge_messages::pallet::Call;
 pub type BridgeGrandpaCall = runtime_types::pallet_bridge_grandpa::pallet::Call;
 pub type BridgeParachainCall = runtime_types::pallet_bridge_parachains::pallet::Call;
-type UncheckedExtrinsic =
-	bp_moonbeam::UncheckedExtrinsic<RuntimeCall, TransactionExtension>;
+type UncheckedExtrinsic = bp_moonbeam::UncheckedExtrinsic<RuntimeCall, TransactionExtension>;
 type UtilityCall = runtime_types::pallet_utility::pallet::Call;
 
 /// Polkadot chain definition
@@ -117,14 +116,16 @@ impl ChainWithTransactions for Moonbeam {
 			),
 		)?;
 
-		let signature: bp_moonbeam::Signature = raw_payload.using_encoded(|payload| {
-			// Moonbeam signer process hashes the message twice
-			// 1. blake2_256
-			// 2. keccak_256
-			let mut h: [u8; 32] = [0u8; 32];
-			h.copy_from_slice(keccak_256(payload).as_slice());
-			param.signer.sign_prehashed(&h)
-		}).into();
+		let signature: bp_moonbeam::Signature = raw_payload
+			.using_encoded(|payload| {
+				// Moonbeam signer process hashes the message twice
+				// 1. blake2_256
+				// 2. keccak_256
+				let mut h: [u8; 32] = [0u8; 32];
+				h.copy_from_slice(keccak_256(payload).as_slice());
+				param.signer.sign_prehashed(&h)
+			})
+			.into();
 		let signer: sp_runtime::MultiSigner = param.signer.public().into();
 		let (call, extra, _) = raw_payload.deconstruct();
 
