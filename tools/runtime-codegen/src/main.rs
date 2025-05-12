@@ -167,6 +167,7 @@ fn main() -> color_eyre::Result<()> {
 		),
 		TypeSubstitute::custom("bp_messages::lane::LegacyLaneId", "::bp_messages::LegacyLaneId"),
 		TypeSubstitute::custom("bp_messages::lane::HashedLaneId", "::bp_messages::HashedLaneId"),
+		TypeSubstitute::custom("account::AccountId20", "::bp_moonbeam::AccountId"),
 	];
 	for type_substitute in type_substitutes {
 		codegen_builder.set_type_substitute(type_substitute.subxt_type, type_substitute.substitute);
