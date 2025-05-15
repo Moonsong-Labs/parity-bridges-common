@@ -79,7 +79,9 @@ declare_chain_cli_schema!(BridgeHubPolkadot, bridge_hub_polkadot);
 declare_chain_cli_schema!(PolkadotBulletin, polkadot_bulletin);
 declare_chain_cli_schema!(RococoBulletin, rococo_bulletin);
 declare_chain_cli_schema!(Betanet, betanet);
+declare_chain_cli_schema!(BetanetRelay, betanet_relay);
 declare_chain_cli_schema!(Stagenet, stagenet);
+declare_chain_cli_schema!(StagenetRelay, stagenet_relay);
 // Means to override signers of different layer transactions.
 declare_chain_cli_schema!(RococoHeadersToBridgeHubWestend, rococo_headers_to_bridge_hub_westend);
 declare_chain_cli_schema!(
@@ -119,7 +121,7 @@ declare_chain_cli_schema!(RococoParachainsToRococoBulletin, rococo_parachains_to
 // All supported bridges.
 declare_parachain_to_parachain_bridge_schema!(BridgeHubRococo, Rococo, BridgeHubWestend, Westend);
 declare_parachain_to_parachain_bridge_schema!(BridgeHubKusama, Kusama, BridgeHubPolkadot, Polkadot);
-declare_parachain_to_parachain_bridge_schema!(Stagenet, Westend, Betanet, Westend);
+declare_parachain_to_parachain_bridge_schema!(Stagenet, StagenetRelay, Betanet, BetanetRelay);
 declare_relay_to_parachain_bridge_schema!(PolkadotBulletin, BridgeHubPolkadot, Polkadot);
 declare_relay_to_parachain_bridge_schema!(RococoBulletin, BridgeHubRococo, Rococo);
 
