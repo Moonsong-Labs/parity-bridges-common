@@ -43,6 +43,7 @@ use crate::bridges::{
 		bridge_hub_rococo_parachains_to_bridge_hub_westend::BridgeHubRococoToBridgeHubWestendCliBridge,
 		bridge_hub_westend_parachains_to_bridge_hub_rococo::BridgeHubWestendToBridgeHubRococoCliBridge,
 	},
+	stagenet_alphanet::{betanet_parachains_to_stagenet, stagenet_parachains_to_betanet},
 };
 use relay_bridge_hub_rococo_client::BridgeHubRococo;
 use relay_substrate_client::{
@@ -77,6 +78,10 @@ declare_chain_cli_schema!(Polkadot, polkadot);
 declare_chain_cli_schema!(BridgeHubPolkadot, bridge_hub_polkadot);
 declare_chain_cli_schema!(PolkadotBulletin, polkadot_bulletin);
 declare_chain_cli_schema!(RococoBulletin, rococo_bulletin);
+declare_chain_cli_schema!(Betanet, betanet);
+declare_chain_cli_schema!(BetanetRelay, betanet_relay);
+declare_chain_cli_schema!(Stagenet, stagenet);
+declare_chain_cli_schema!(StagenetRelay, stagenet_relay);
 // Means to override signers of different layer transactions.
 declare_chain_cli_schema!(RococoHeadersToBridgeHubWestend, rococo_headers_to_bridge_hub_westend);
 declare_chain_cli_schema!(
@@ -116,8 +121,35 @@ declare_chain_cli_schema!(RococoParachainsToRococoBulletin, rococo_parachains_to
 // All supported bridges.
 declare_parachain_to_parachain_bridge_schema!(BridgeHubRococo, Rococo, BridgeHubWestend, Westend);
 declare_parachain_to_parachain_bridge_schema!(BridgeHubKusama, Kusama, BridgeHubPolkadot, Polkadot);
+declare_parachain_to_parachain_bridge_schema!(Betanet, BetanetRelay, Stagenet, StagenetRelay);
 declare_relay_to_parachain_bridge_schema!(PolkadotBulletin, BridgeHubPolkadot, Polkadot);
 declare_relay_to_parachain_bridge_schema!(RococoBulletin, BridgeHubRococo, Rococo);
+
+/// Stagenet <> Betanet complex relay.
+pub struct StagenetBetanetFull2WayBridge {
+	base: <Self as Full2WayBridge>::Base,
+}
+
+#[async_trait]
+impl Full2WayBridge for StagenetBetanetFull2WayBridge {
+	type Base = ParachainToParachainBridge<Self::L2R, Self::R2L>;
+	type Left = relay_moonbase_client::betanet::Betanet;
+	type Right = relay_moonbase_client::stagenet::Stagenet;
+	type L2R = betanet_parachains_to_stagenet::CliBridge;
+	type R2L = stagenet_parachains_to_betanet::CliBridge;
+
+	fn new(base: Self::Base) -> anyhow::Result<Self> {
+		Ok(Self { base })
+	}
+
+	fn base(&self) -> &Self::Base {
+		&self.base
+	}
+
+	fn mut_base(&mut self) -> &mut Self::Base {
+		&mut self.base
+	}
+}
 
 /// BridgeHubRococo <> BridgeHubWestend complex relay.
 pub struct BridgeHubRococoBridgeHubWestendFull2WayBridge {
@@ -234,6 +266,8 @@ pub enum RelayHeadersAndMessages {
 	RococoBulletinBridgeHubRococo(RococoBulletinBridgeHubRococoHeadersAndMessages),
 	/// BridgeHubRococo <> BridgeHubWestend relay.
 	BridgeHubRococoBridgeHubWestend(BridgeHubRococoBridgeHubWestendHeadersAndMessages),
+	/// Betanet <> Stagenet relay
+	BetanetStagenet(BetanetStagenetHeadersAndMessages),
 }
 
 impl RelayHeadersAndMessages {
@@ -256,6 +290,8 @@ impl RelayHeadersAndMessages {
 				RococoBulletinBridgeHubRococoFull2WayBridge::new(params.into_bridge().await?)?
 					.run()
 					.await,
+			RelayHeadersAndMessages::BetanetStagenet(params) =>
+				StagenetBetanetFull2WayBridge::new(params.into_bridge().await?)?.run().await,
 		}
 	}
 }
