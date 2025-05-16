@@ -1600,7 +1600,7 @@ pub mod api {
 				#[codec(index = 58)]
 				XcmWeightTrader(runtime_types::pallet_xcm_weight_trader::pallet::Call),
 				#[codec(index = 130)]
-				BridgeGrandpa(runtime_types::pallet_bridge_grandpa::pallet::Call),
+				BridgeWestendGrandpa(runtime_types::pallet_bridge_grandpa::pallet::Call),
 				#[codec(index = 131)]
 				BridgeParachains(runtime_types::pallet_bridge_parachains::pallet::Call),
 				#[codec(index = 132)]
@@ -1691,7 +1691,7 @@ pub mod api {
 				#[codec(index = 58)]
 				XcmWeightTrader(runtime_types::pallet_xcm_weight_trader::pallet::Error),
 				#[codec(index = 130)]
-				BridgeGrandpa(runtime_types::pallet_bridge_grandpa::pallet::Error),
+				BridgeWestendGrandpa(runtime_types::pallet_bridge_grandpa::pallet::Error),
 				#[codec(index = 131)]
 				BridgeParachains(runtime_types::pallet_bridge_parachains::pallet::Error),
 				#[codec(index = 132)]
@@ -1782,7 +1782,7 @@ pub mod api {
 				#[codec(index = 58)]
 				XcmWeightTrader(runtime_types::pallet_xcm_weight_trader::pallet::Event),
 				#[codec(index = 130)]
-				BridgeGrandpa(runtime_types::pallet_bridge_grandpa::pallet::Event),
+				BridgeWestendGrandpa(runtime_types::pallet_bridge_grandpa::pallet::Event),
 				#[codec(index = 131)]
 				BridgeParachains(runtime_types::pallet_bridge_parachains::pallet::Event),
 				#[codec(index = 132)]

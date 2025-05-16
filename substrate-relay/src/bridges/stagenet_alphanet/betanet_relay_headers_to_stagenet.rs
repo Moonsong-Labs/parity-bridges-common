@@ -34,7 +34,7 @@ pub struct MoonbaseRelayFinality;
 substrate_relay_helper::generate_submit_finality_proof_ex_call_builder!(
 	MoonbaseRelayFinality,
 	SubmitFinalityProofCallBuilder,
-	relay_moonbase_client::RuntimeCall::BridgeGrandpa,
+	relay_moonbase_client::RuntimeCall::BridgeWestendGrandpa,
 	relay_moonbase_client::BridgeGrandpaCall::submit_finality_proof_ex
 );
 

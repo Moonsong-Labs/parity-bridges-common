@@ -157,7 +157,7 @@ impl BridgeInitializer
 	fn encode_init_bridge(
 		init_data: <Self::Engine as Engine<Self::Source>>::InitializationData,
 	) -> <Self::Target as Chain>::Call {
-		relay_moonbase_client::RuntimeCall::BridgeGrandpa(
+		relay_moonbase_client::RuntimeCall::BridgeWestendGrandpa(
 			relay_moonbase_client::BridgeGrandpaCall::initialize { init_data },
 		)
 	}
@@ -171,7 +171,7 @@ impl BridgeInitializer
 	fn encode_init_bridge(
 		init_data: <Self::Engine as Engine<Self::Source>>::InitializationData,
 	) -> <Self::Target as Chain>::Call {
-		relay_moonbase_client::RuntimeCall::BridgeGrandpa(
+		relay_moonbase_client::RuntimeCall::BridgeWestendGrandpa(
 			relay_moonbase_client::BridgeGrandpaCall::initialize { init_data },
 		)
 	}
