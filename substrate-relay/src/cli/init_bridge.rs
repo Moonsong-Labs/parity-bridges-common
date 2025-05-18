@@ -17,7 +17,9 @@
 use crate::bridges::{
 	kusama_polkadot::{
 		kusama_headers_to_bridge_hub_polkadot::KusamaToBridgeHubPolkadotCliBridge,
+		kusama_headers_to_moonbeam::KusamaToMoonbeamCliBridge,
 		polkadot_headers_to_bridge_hub_kusama::PolkadotToBridgeHubKusamaCliBridge,
+		polkadot_headers_to_moonriver::PolkadotToMoonriverCliBridge,
 	},
 	polkadot_bulletin::{
 		polkadot_bulletin_headers_to_bridge_hub_polkadot::PolkadotBulletinToBridgeHubPolkadotCliBridge,
@@ -163,6 +165,19 @@ impl BridgeInitializer
 	}
 }
 
+
+impl BridgeInitializer for PolkadotToMoonriverCliBridge {
+	type Engine = GrandpaFinalityEngine<Self::Source>;
+
+	fn encode_init_bridge(
+		init_data: <Self::Engine as Engine<Self::Source>>::InitializationData,
+	) -> <Self::Target as Chain>::Call {
+		relay_moonriver_client::RuntimeCall::BridgePolkadotGrandpa(
+			relay_moonriver_client::BridgeGrandpaCall::initialize { init_data },
+		)
+	}
+}
+
 impl BridgeInitializer
 	for crate::bridges::stagenet_alphanet::stagenet_relay_headers_to_betanet::CliBridge
 {
@@ -173,6 +188,19 @@ impl BridgeInitializer
 	) -> <Self::Target as Chain>::Call {
 		relay_moonbase_client::RuntimeCall::BridgeWestendGrandpa(
 			relay_moonbase_client::BridgeGrandpaCall::initialize { init_data },
+		)
+	}
+}
+
+
+impl BridgeInitializer for KusamaToMoonbeamCliBridge {
+	type Engine = GrandpaFinalityEngine<Self::Source>;
+
+	fn encode_init_bridge(
+		init_data: <Self::Engine as Engine<Self::Source>>::InitializationData,
+	) -> <Self::Target as Chain>::Call {
+		relay_moonbeam_client::RuntimeCall::BridgeKusamaGrandpa(
+			relay_moonbeam_client::BridgeGrandpaCall::initialize { init_data },
 		)
 	}
 }
@@ -201,6 +229,8 @@ pub enum InitBridgeName {
 	WestendToBridgeHubRococo,
 	StagenetToBetanet,
 	BetanetToStagenet,
+	PolkadotToMoonriver,
+	KusamaToMoonbeam,
 }
 
 impl InitBridge {
@@ -227,6 +257,9 @@ impl InitBridge {
 				crate::bridges::stagenet_alphanet::stagenet_relay_headers_to_betanet::CliBridge::init_bridge(self.params),
 			InitBridgeName::BetanetToStagenet =>
 				crate::bridges::stagenet_alphanet::betanet_relay_headers_to_stagenet::CliBridge::init_bridge(self.params),
+			InitBridgeName::PolkadotToMoonriver =>
+				PolkadotToMoonriverCliBridge::init_bridge(self.params),
+			InitBridgeName::KusamaToMoonbeam => KusamaToMoonbeamCliBridge::init_bridge(self.params),
 		}
 		.await
 	}

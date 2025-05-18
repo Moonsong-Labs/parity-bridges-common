@@ -1286,6 +1286,42 @@ dependencies = [
 ]
 
 [[package]]
+name = "bp-moonbeam"
+version = "0.6.0"
+dependencies = [
+ "bp-bridge-hub-cumulus",
+ "bp-messages",
+ "bp-runtime",
+ "frame-support",
+ "impl-serde 0.4.0",
+ "libsecp256k1",
+ "log",
+ "parity-scale-codec",
+ "scale-info",
+ "serde",
+ "sha3",
+ "sp-api",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "bp-moonriver"
+version = "0.6.0"
+dependencies = [
+ "bp-bridge-hub-cumulus",
+ "bp-messages",
+ "bp-moonbeam",
+ "bp-runtime",
+ "frame-support",
+ "sp-api",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
 name = "bp-parachains"
 version = "0.7.0"
 source = "git+https://github.com/paritytech/polkadot-sdk?branch=master#9601363f6a8b88510cb38782dd77f08778da5fb7"
@@ -7680,6 +7716,53 @@ dependencies = [
 ]
 
 [[package]]
+name = "relay-moonbeam-client"
+version = "0.1.0"
+dependencies = [
+ "bp-header-chain",
+ "bp-messages",
+ "bp-moonbeam",
+ "bp-polkadot-bulletin",
+ "bp-polkadot-core",
+ "bp-runtime",
+ "bridge-runtime-common",
+ "parity-scale-codec",
+ "relay-substrate-client",
+ "relay-utils",
+ "scale-info",
+ "sp-consensus-grandpa",
+ "sp-core",
+ "sp-runtime",
+ "sp-session",
+ "sp-weights",
+ "subxt",
+]
+
+[[package]]
+name = "relay-moonriver-client"
+version = "0.1.0"
+dependencies = [
+ "bp-header-chain",
+ "bp-messages",
+ "bp-moonbeam",
+ "bp-moonriver",
+ "bp-polkadot-bulletin",
+ "bp-polkadot-core",
+ "bp-runtime",
+ "bridge-runtime-common",
+ "parity-scale-codec",
+ "relay-substrate-client",
+ "relay-utils",
+ "scale-info",
+ "sp-consensus-grandpa",
+ "sp-core",
+ "sp-runtime",
+ "sp-session",
+ "sp-weights",
+ "subxt",
+]
+
+[[package]]
 name = "relay-polkadot-bulletin-client"
 version = "0.1.0"
 dependencies = [
@@ -10083,6 +10166,8 @@ dependencies = [
  "relay-bridge-hub-westend-client",
  "relay-kusama-client",
  "relay-moonbase-client",
+ "relay-moonbeam-client",
+ "relay-moonriver-client",
  "relay-polkadot-bulletin-client",
  "relay-polkadot-client",
  "relay-rococo-client",

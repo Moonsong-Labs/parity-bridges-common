@@ -55,6 +55,8 @@ relay-substrate-client = { workspace = true }
 relay-utils = { workspace = true }
 relay-westend-client = { workspace = true }
 relay-moonbase-client = { workspace = true }
+relay-moonbeam-client = { workspace = true }
+relay-moonriver-client = { workspace = true }
 substrate-relay-helper = { workspace = true }
 
 # Substrate Dependencies
