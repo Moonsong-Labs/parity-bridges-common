@@ -14,10 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with Parity Bridges Common.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Declaration of all bridges that the relay is able to serve.
+//! Declaration of all bridges between Stagenet relay and Alphanet relay.
 
-pub mod kusama_polkadot;
-pub mod polkadot_bulletin;
-pub mod rococo_bulletin;
-pub mod rococo_westend;
-pub mod stagenet_alphanet;
+// Betanet <> Stagenet modules
+pub mod betanet_messages_to_stagenet;
+pub mod betanet_parachains_to_stagenet;
+pub mod betanet_relay_headers_to_stagenet;
+pub mod stagenet_messages_to_betanet;
+pub mod stagenet_parachains_to_betanet;
+pub mod stagenet_relay_headers_to_betanet;
