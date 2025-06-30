@@ -266,11 +266,11 @@ pub mod api {
 				pub state: runtime_types::bp_xcm_bridge::BridgeState,
 				pub deposit: ::core::option::Option<
 					runtime_types::bp_xcm_bridge::Deposit<
-						::bp_moonbeam::AccountId,
+						::bp_moonriver::AccountId,
 						::core::primitive::u128,
 					>,
 				>,
-				pub lane_id: ::bp_messages::LegacyLaneId,
+				pub lane_id: ::bp_messages::HashedLaneId,
 				pub maybe_notify: ::core::option::Option<runtime_types::bp_xcm_bridge::Receiver>,
 			}
 			#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
@@ -1214,12 +1214,12 @@ pub mod api {
 					#[codec(index = 2)]
 					CodeUpdated,
 					#[codec(index = 3)]
-					NewAccount { account: ::bp_moonbeam::AccountId },
+					NewAccount { account: ::bp_moonriver::AccountId },
 					#[codec(index = 4)]
-					KilledAccount { account: ::bp_moonbeam::AccountId },
+					KilledAccount { account: ::bp_moonriver::AccountId },
 					#[codec(index = 5)]
 					Remarked {
-						sender: ::bp_moonbeam::AccountId,
+						sender: ::bp_moonriver::AccountId,
 						hash: ::subxt::ext::subxt_core::utils::H256,
 					},
 					#[codec(index = 6)]
@@ -1484,7 +1484,9 @@ pub mod api {
 			#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
 			pub enum OriginCaller {
 				#[codec(index = 0)]
-				system(runtime_types::frame_support::dispatch::RawOrigin<::bp_moonbeam::AccountId>),
+				system(
+					runtime_types::frame_support::dispatch::RawOrigin<::bp_moonriver::AccountId>,
+				),
 				#[codec(index = 52)]
 				Ethereum(runtime_types::pallet_ethereum::RawOrigin),
 				#[codec(index = 65)]
@@ -1493,11 +1495,11 @@ pub mod api {
 				),
 				#[codec(index = 72)]
 				TreasuryCouncilCollective(
-					runtime_types::pallet_collective::RawOrigin<::bp_moonbeam::AccountId>,
+					runtime_types::pallet_collective::RawOrigin<::bp_moonriver::AccountId>,
 				),
 				#[codec(index = 73)]
 				OpenTechCommitteeCollective(
-					runtime_types::pallet_collective::RawOrigin<::bp_moonbeam::AccountId>,
+					runtime_types::pallet_collective::RawOrigin<::bp_moonriver::AccountId>,
 				),
 				#[codec(index = 101)]
 				CumulusXcm(runtime_types::cumulus_pallet_xcm::pallet::Origin),
@@ -1909,14 +1911,14 @@ pub mod api {
 					create {
 						#[codec(compact)]
 						id: ::core::primitive::u128,
-						admin: ::bp_moonbeam::AccountId,
+						admin: ::bp_moonriver::AccountId,
 						min_balance: ::core::primitive::u128,
 					},
 					#[codec(index = 1)]
 					force_create {
 						#[codec(compact)]
 						id: ::core::primitive::u128,
-						owner: ::bp_moonbeam::AccountId,
+						owner: ::bp_moonriver::AccountId,
 						is_sufficient: ::core::primitive::bool,
 						#[codec(compact)]
 						min_balance: ::core::primitive::u128,
@@ -1945,7 +1947,7 @@ pub mod api {
 					mint {
 						#[codec(compact)]
 						id: ::core::primitive::u128,
-						beneficiary: ::bp_moonbeam::AccountId,
+						beneficiary: ::bp_moonriver::AccountId,
 						#[codec(compact)]
 						amount: ::core::primitive::u128,
 					},
@@ -1953,7 +1955,7 @@ pub mod api {
 					burn {
 						#[codec(compact)]
 						id: ::core::primitive::u128,
-						who: ::bp_moonbeam::AccountId,
+						who: ::bp_moonriver::AccountId,
 						#[codec(compact)]
 						amount: ::core::primitive::u128,
 					},
@@ -1961,7 +1963,7 @@ pub mod api {
 					transfer {
 						#[codec(compact)]
 						id: ::core::primitive::u128,
-						target: ::bp_moonbeam::AccountId,
+						target: ::bp_moonriver::AccountId,
 						#[codec(compact)]
 						amount: ::core::primitive::u128,
 					},
@@ -1969,7 +1971,7 @@ pub mod api {
 					transfer_keep_alive {
 						#[codec(compact)]
 						id: ::core::primitive::u128,
-						target: ::bp_moonbeam::AccountId,
+						target: ::bp_moonriver::AccountId,
 						#[codec(compact)]
 						amount: ::core::primitive::u128,
 					},
@@ -1977,8 +1979,8 @@ pub mod api {
 					force_transfer {
 						#[codec(compact)]
 						id: ::core::primitive::u128,
-						source: ::bp_moonbeam::AccountId,
-						dest: ::bp_moonbeam::AccountId,
+						source: ::bp_moonriver::AccountId,
+						dest: ::bp_moonriver::AccountId,
 						#[codec(compact)]
 						amount: ::core::primitive::u128,
 					},
@@ -1986,13 +1988,13 @@ pub mod api {
 					freeze {
 						#[codec(compact)]
 						id: ::core::primitive::u128,
-						who: ::bp_moonbeam::AccountId,
+						who: ::bp_moonriver::AccountId,
 					},
 					#[codec(index = 12)]
 					thaw {
 						#[codec(compact)]
 						id: ::core::primitive::u128,
-						who: ::bp_moonbeam::AccountId,
+						who: ::bp_moonriver::AccountId,
 					},
 					#[codec(index = 13)]
 					freeze_asset {
@@ -2008,15 +2010,15 @@ pub mod api {
 					transfer_ownership {
 						#[codec(compact)]
 						id: ::core::primitive::u128,
-						owner: ::bp_moonbeam::AccountId,
+						owner: ::bp_moonriver::AccountId,
 					},
 					#[codec(index = 16)]
 					set_team {
 						#[codec(compact)]
 						id: ::core::primitive::u128,
-						issuer: ::bp_moonbeam::AccountId,
-						admin: ::bp_moonbeam::AccountId,
-						freezer: ::bp_moonbeam::AccountId,
+						issuer: ::bp_moonriver::AccountId,
+						admin: ::bp_moonriver::AccountId,
+						freezer: ::bp_moonriver::AccountId,
 					},
 					#[codec(index = 17)]
 					set_metadata {
@@ -2049,10 +2051,10 @@ pub mod api {
 					force_asset_status {
 						#[codec(compact)]
 						id: ::core::primitive::u128,
-						owner: ::bp_moonbeam::AccountId,
-						issuer: ::bp_moonbeam::AccountId,
-						admin: ::bp_moonbeam::AccountId,
-						freezer: ::bp_moonbeam::AccountId,
+						owner: ::bp_moonriver::AccountId,
+						issuer: ::bp_moonriver::AccountId,
+						admin: ::bp_moonriver::AccountId,
+						freezer: ::bp_moonriver::AccountId,
 						#[codec(compact)]
 						min_balance: ::core::primitive::u128,
 						is_sufficient: ::core::primitive::bool,
@@ -2062,7 +2064,7 @@ pub mod api {
 					approve_transfer {
 						#[codec(compact)]
 						id: ::core::primitive::u128,
-						delegate: ::bp_moonbeam::AccountId,
+						delegate: ::bp_moonriver::AccountId,
 						#[codec(compact)]
 						amount: ::core::primitive::u128,
 					},
@@ -2070,21 +2072,21 @@ pub mod api {
 					cancel_approval {
 						#[codec(compact)]
 						id: ::core::primitive::u128,
-						delegate: ::bp_moonbeam::AccountId,
+						delegate: ::bp_moonriver::AccountId,
 					},
 					#[codec(index = 24)]
 					force_cancel_approval {
 						#[codec(compact)]
 						id: ::core::primitive::u128,
-						owner: ::bp_moonbeam::AccountId,
-						delegate: ::bp_moonbeam::AccountId,
+						owner: ::bp_moonriver::AccountId,
+						delegate: ::bp_moonriver::AccountId,
 					},
 					#[codec(index = 25)]
 					transfer_approved {
 						#[codec(compact)]
 						id: ::core::primitive::u128,
-						owner: ::bp_moonbeam::AccountId,
-						destination: ::bp_moonbeam::AccountId,
+						owner: ::bp_moonriver::AccountId,
+						destination: ::bp_moonriver::AccountId,
 						#[codec(compact)]
 						amount: ::core::primitive::u128,
 					},
@@ -2109,25 +2111,25 @@ pub mod api {
 					touch_other {
 						#[codec(compact)]
 						id: ::core::primitive::u128,
-						who: ::bp_moonbeam::AccountId,
+						who: ::bp_moonriver::AccountId,
 					},
 					#[codec(index = 30)]
 					refund_other {
 						#[codec(compact)]
 						id: ::core::primitive::u128,
-						who: ::bp_moonbeam::AccountId,
+						who: ::bp_moonriver::AccountId,
 					},
 					#[codec(index = 31)]
 					block {
 						#[codec(compact)]
 						id: ::core::primitive::u128,
-						who: ::bp_moonbeam::AccountId,
+						who: ::bp_moonriver::AccountId,
 					},
 					#[codec(index = 32)]
 					transfer_all {
 						#[codec(compact)]
 						id: ::core::primitive::u128,
-						dest: ::bp_moonbeam::AccountId,
+						dest: ::bp_moonriver::AccountId,
 						keep_alive: ::core::primitive::bool,
 					},
 				}
@@ -2181,44 +2183,44 @@ pub mod api {
 					#[codec(index = 0)]
 					Created {
 						asset_id: ::core::primitive::u128,
-						creator: ::bp_moonbeam::AccountId,
-						owner: ::bp_moonbeam::AccountId,
+						creator: ::bp_moonriver::AccountId,
+						owner: ::bp_moonriver::AccountId,
 					},
 					#[codec(index = 1)]
 					Issued {
 						asset_id: ::core::primitive::u128,
-						owner: ::bp_moonbeam::AccountId,
+						owner: ::bp_moonriver::AccountId,
 						amount: ::core::primitive::u128,
 					},
 					#[codec(index = 2)]
 					Transferred {
 						asset_id: ::core::primitive::u128,
-						from: ::bp_moonbeam::AccountId,
-						to: ::bp_moonbeam::AccountId,
+						from: ::bp_moonriver::AccountId,
+						to: ::bp_moonriver::AccountId,
 						amount: ::core::primitive::u128,
 					},
 					#[codec(index = 3)]
 					Burned {
 						asset_id: ::core::primitive::u128,
-						owner: ::bp_moonbeam::AccountId,
+						owner: ::bp_moonriver::AccountId,
 						balance: ::core::primitive::u128,
 					},
 					#[codec(index = 4)]
 					TeamChanged {
 						asset_id: ::core::primitive::u128,
-						issuer: ::bp_moonbeam::AccountId,
-						admin: ::bp_moonbeam::AccountId,
-						freezer: ::bp_moonbeam::AccountId,
+						issuer: ::bp_moonriver::AccountId,
+						admin: ::bp_moonriver::AccountId,
+						freezer: ::bp_moonriver::AccountId,
 					},
 					#[codec(index = 5)]
 					OwnerChanged {
 						asset_id: ::core::primitive::u128,
-						owner: ::bp_moonbeam::AccountId,
+						owner: ::bp_moonriver::AccountId,
 					},
 					#[codec(index = 6)]
-					Frozen { asset_id: ::core::primitive::u128, who: ::bp_moonbeam::AccountId },
+					Frozen { asset_id: ::core::primitive::u128, who: ::bp_moonriver::AccountId },
 					#[codec(index = 7)]
-					Thawed { asset_id: ::core::primitive::u128, who: ::bp_moonbeam::AccountId },
+					Thawed { asset_id: ::core::primitive::u128, who: ::bp_moonriver::AccountId },
 					#[codec(index = 8)]
 					AssetFrozen { asset_id: ::core::primitive::u128 },
 					#[codec(index = 9)]
@@ -2242,7 +2244,7 @@ pub mod api {
 					#[codec(index = 14)]
 					ForceCreated {
 						asset_id: ::core::primitive::u128,
-						owner: ::bp_moonbeam::AccountId,
+						owner: ::bp_moonriver::AccountId,
 					},
 					#[codec(index = 15)]
 					MetadataSet {
@@ -2257,22 +2259,22 @@ pub mod api {
 					#[codec(index = 17)]
 					ApprovedTransfer {
 						asset_id: ::core::primitive::u128,
-						source: ::bp_moonbeam::AccountId,
-						delegate: ::bp_moonbeam::AccountId,
+						source: ::bp_moonriver::AccountId,
+						delegate: ::bp_moonriver::AccountId,
 						amount: ::core::primitive::u128,
 					},
 					#[codec(index = 18)]
 					ApprovalCancelled {
 						asset_id: ::core::primitive::u128,
-						owner: ::bp_moonbeam::AccountId,
-						delegate: ::bp_moonbeam::AccountId,
+						owner: ::bp_moonriver::AccountId,
+						delegate: ::bp_moonriver::AccountId,
 					},
 					#[codec(index = 19)]
 					TransferredApproved {
 						asset_id: ::core::primitive::u128,
-						owner: ::bp_moonbeam::AccountId,
-						delegate: ::bp_moonbeam::AccountId,
-						destination: ::bp_moonbeam::AccountId,
+						owner: ::bp_moonriver::AccountId,
+						delegate: ::bp_moonriver::AccountId,
+						destination: ::bp_moonriver::AccountId,
 						amount: ::core::primitive::u128,
 					},
 					#[codec(index = 20)]
@@ -2285,21 +2287,21 @@ pub mod api {
 					#[codec(index = 22)]
 					Touched {
 						asset_id: ::core::primitive::u128,
-						who: ::bp_moonbeam::AccountId,
-						depositor: ::bp_moonbeam::AccountId,
+						who: ::bp_moonriver::AccountId,
+						depositor: ::bp_moonriver::AccountId,
 					},
 					#[codec(index = 23)]
-					Blocked { asset_id: ::core::primitive::u128, who: ::bp_moonbeam::AccountId },
+					Blocked { asset_id: ::core::primitive::u128, who: ::bp_moonriver::AccountId },
 					#[codec(index = 24)]
 					Deposited {
 						asset_id: ::core::primitive::u128,
-						who: ::bp_moonbeam::AccountId,
+						who: ::bp_moonriver::AccountId,
 						amount: ::core::primitive::u128,
 					},
 					#[codec(index = 25)]
 					Withdrawn {
 						asset_id: ::core::primitive::u128,
-						who: ::bp_moonbeam::AccountId,
+						who: ::bp_moonriver::AccountId,
 						amount: ::core::primitive::u128,
 					},
 				}
@@ -2446,25 +2448,25 @@ pub mod api {
 					#[codec(index = 0)]
 					KeysRegistered {
 						nimbus_id: runtime_types::nimbus_primitives::nimbus_crypto::Public,
-						account_id: ::bp_moonbeam::AccountId,
+						account_id: ::bp_moonriver::AccountId,
 						keys: runtime_types::session_keys_primitives::vrf::vrf_crypto::Public,
 					},
 					#[codec(index = 1)]
 					KeysRemoved {
 						nimbus_id: runtime_types::nimbus_primitives::nimbus_crypto::Public,
-						account_id: ::bp_moonbeam::AccountId,
+						account_id: ::bp_moonriver::AccountId,
 						keys: runtime_types::session_keys_primitives::vrf::vrf_crypto::Public,
 					},
 					#[codec(index = 2)]
 					KeysRotated {
 						new_nimbus_id: runtime_types::nimbus_primitives::nimbus_crypto::Public,
-						account_id: ::bp_moonbeam::AccountId,
+						account_id: ::bp_moonriver::AccountId,
 						new_keys: runtime_types::session_keys_primitives::vrf::vrf_crypto::Public,
 					},
 				}
 				#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
 				pub struct RegistrationInfo {
-					pub account: ::bp_moonbeam::AccountId,
+					pub account: ::bp_moonriver::AccountId,
 					pub deposit: ::core::primitive::u128,
 					pub keys: runtime_types::session_keys_primitives::vrf::vrf_crypto::Public,
 				}
@@ -2506,40 +2508,40 @@ pub mod api {
 				pub enum Call {
 					#[codec(index = 0)]
 					transfer_allow_death {
-						dest: ::bp_moonbeam::AccountId,
+						dest: ::bp_moonriver::AccountId,
 						#[codec(compact)]
 						value: ::core::primitive::u128,
 					},
 					#[codec(index = 2)]
 					force_transfer {
-						source: ::bp_moonbeam::AccountId,
-						dest: ::bp_moonbeam::AccountId,
+						source: ::bp_moonriver::AccountId,
+						dest: ::bp_moonriver::AccountId,
 						#[codec(compact)]
 						value: ::core::primitive::u128,
 					},
 					#[codec(index = 3)]
 					transfer_keep_alive {
-						dest: ::bp_moonbeam::AccountId,
+						dest: ::bp_moonriver::AccountId,
 						#[codec(compact)]
 						value: ::core::primitive::u128,
 					},
 					#[codec(index = 4)]
 					transfer_all {
-						dest: ::bp_moonbeam::AccountId,
+						dest: ::bp_moonriver::AccountId,
 						keep_alive: ::core::primitive::bool,
 					},
 					#[codec(index = 5)]
 					force_unreserve {
-						who: ::bp_moonbeam::AccountId,
+						who: ::bp_moonriver::AccountId,
 						amount: ::core::primitive::u128,
 					},
 					#[codec(index = 6)]
 					upgrade_accounts {
-						who: ::subxt::ext::subxt_core::alloc::vec::Vec<::bp_moonbeam::AccountId>,
+						who: ::subxt::ext::subxt_core::alloc::vec::Vec<::bp_moonriver::AccountId>,
 					},
 					#[codec(index = 8)]
 					force_set_balance {
-						who: ::bp_moonbeam::AccountId,
+						who: ::bp_moonriver::AccountId,
 						#[codec(compact)]
 						new_free: ::core::primitive::u128,
 					},
@@ -2587,59 +2589,59 @@ pub mod api {
 				pub enum Event {
 					#[codec(index = 0)]
 					Endowed {
-						account: ::bp_moonbeam::AccountId,
+						account: ::bp_moonriver::AccountId,
 						free_balance: ::core::primitive::u128,
 					},
 					#[codec(index = 1)]
-					DustLost { account: ::bp_moonbeam::AccountId, amount: ::core::primitive::u128 },
+					DustLost { account: ::bp_moonriver::AccountId, amount: ::core::primitive::u128 },
 					#[codec(index = 2)]
 					Transfer {
-						from: ::bp_moonbeam::AccountId,
-						to: ::bp_moonbeam::AccountId,
+						from: ::bp_moonriver::AccountId,
+						to: ::bp_moonriver::AccountId,
 						amount: ::core::primitive::u128,
 					},
 					#[codec(index = 3)]
-					BalanceSet { who: ::bp_moonbeam::AccountId, free: ::core::primitive::u128 },
+					BalanceSet { who: ::bp_moonriver::AccountId, free: ::core::primitive::u128 },
 					#[codec(index = 4)]
-					Reserved { who: ::bp_moonbeam::AccountId, amount: ::core::primitive::u128 },
+					Reserved { who: ::bp_moonriver::AccountId, amount: ::core::primitive::u128 },
 					#[codec(index = 5)]
-					Unreserved { who: ::bp_moonbeam::AccountId, amount: ::core::primitive::u128 },
+					Unreserved { who: ::bp_moonriver::AccountId, amount: ::core::primitive::u128 },
 					#[codec(index = 6)]
 					ReserveRepatriated {
-						from: ::bp_moonbeam::AccountId,
-						to: ::bp_moonbeam::AccountId,
+						from: ::bp_moonriver::AccountId,
+						to: ::bp_moonriver::AccountId,
 						amount: ::core::primitive::u128,
 						destination_status:
 							runtime_types::frame_support::traits::tokens::misc::BalanceStatus,
 					},
 					#[codec(index = 7)]
-					Deposit { who: ::bp_moonbeam::AccountId, amount: ::core::primitive::u128 },
+					Deposit { who: ::bp_moonriver::AccountId, amount: ::core::primitive::u128 },
 					#[codec(index = 8)]
-					Withdraw { who: ::bp_moonbeam::AccountId, amount: ::core::primitive::u128 },
+					Withdraw { who: ::bp_moonriver::AccountId, amount: ::core::primitive::u128 },
 					#[codec(index = 9)]
-					Slashed { who: ::bp_moonbeam::AccountId, amount: ::core::primitive::u128 },
+					Slashed { who: ::bp_moonriver::AccountId, amount: ::core::primitive::u128 },
 					#[codec(index = 10)]
-					Minted { who: ::bp_moonbeam::AccountId, amount: ::core::primitive::u128 },
+					Minted { who: ::bp_moonriver::AccountId, amount: ::core::primitive::u128 },
 					#[codec(index = 11)]
-					Burned { who: ::bp_moonbeam::AccountId, amount: ::core::primitive::u128 },
+					Burned { who: ::bp_moonriver::AccountId, amount: ::core::primitive::u128 },
 					#[codec(index = 12)]
-					Suspended { who: ::bp_moonbeam::AccountId, amount: ::core::primitive::u128 },
+					Suspended { who: ::bp_moonriver::AccountId, amount: ::core::primitive::u128 },
 					#[codec(index = 13)]
-					Restored { who: ::bp_moonbeam::AccountId, amount: ::core::primitive::u128 },
+					Restored { who: ::bp_moonriver::AccountId, amount: ::core::primitive::u128 },
 					#[codec(index = 14)]
-					Upgraded { who: ::bp_moonbeam::AccountId },
+					Upgraded { who: ::bp_moonriver::AccountId },
 					#[codec(index = 15)]
 					Issued { amount: ::core::primitive::u128 },
 					#[codec(index = 16)]
 					Rescinded { amount: ::core::primitive::u128 },
 					#[codec(index = 17)]
-					Locked { who: ::bp_moonbeam::AccountId, amount: ::core::primitive::u128 },
+					Locked { who: ::bp_moonriver::AccountId, amount: ::core::primitive::u128 },
 					#[codec(index = 18)]
-					Unlocked { who: ::bp_moonbeam::AccountId, amount: ::core::primitive::u128 },
+					Unlocked { who: ::bp_moonriver::AccountId, amount: ::core::primitive::u128 },
 					#[codec(index = 19)]
-					Frozen { who: ::bp_moonbeam::AccountId, amount: ::core::primitive::u128 },
+					Frozen { who: ::bp_moonriver::AccountId, amount: ::core::primitive::u128 },
 					#[codec(index = 20)]
-					Thawed { who: ::bp_moonbeam::AccountId, amount: ::core::primitive::u128 },
+					Thawed { who: ::bp_moonriver::AccountId, amount: ::core::primitive::u128 },
 					#[codec(index = 21)]
 					TotalIssuanceForced {
 						old: ::core::primitive::u128,
@@ -2725,7 +2727,7 @@ pub mod api {
 						>,
 					},
 					#[codec(index = 2)]
-					set_owner { new_owner: ::core::option::Option<::bp_moonbeam::AccountId> },
+					set_owner { new_owner: ::core::option::Option<::bp_moonriver::AccountId> },
 					#[codec(index = 3)]
 					set_operating_mode {
 						operating_mode: runtime_types::bp_runtime::BasicOperatingMode,
@@ -2860,18 +2862,18 @@ pub mod api {
 				#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
 				pub enum Call {
 					#[codec(index = 0)]
-					set_owner { new_owner: ::core::option::Option<::bp_moonbeam::AccountId> },
+					set_owner { new_owner: ::core::option::Option<::bp_moonriver::AccountId> },
 					#[codec(index = 1)]
 					set_operating_mode {
 						operating_mode: runtime_types::bp_messages::MessagesOperatingMode,
 					},
 					#[codec(index = 2)]
 					receive_messages_proof {
-						relayer_id_at_bridged_chain: ::bp_moonbeam::AccountId,
+						relayer_id_at_bridged_chain: ::bp_moonriver::AccountId,
 						proof: ::subxt::ext::subxt_core::alloc::boxed::Box<
 							::bp_messages::target_chain::FromBridgedChainMessagesProof<
 								::subxt::ext::subxt_core::utils::H256,
-								::bp_messages::LegacyLaneId,
+								::bp_messages::HashedLaneId,
 							>,
 						>,
 						messages_count: ::core::primitive::u32,
@@ -2881,7 +2883,7 @@ pub mod api {
 					receive_messages_delivery_proof {
 						proof: ::bp_messages::source_chain::FromBridgedChainMessagesDeliveryProof<
 							::subxt::ext::subxt_core::utils::H256,
-							::bp_messages::LegacyLaneId,
+							::bp_messages::HashedLaneId,
 						>,
 						relayers_state: ::bp_messages::UnrewardedRelayersState,
 					},
@@ -2919,19 +2921,19 @@ pub mod api {
 				pub enum Event {
 					#[codec(index = 0)]
                     MessageAccepted {
-                        lane_id: ::bp_messages::LegacyLaneId,
+                        lane_id: ::bp_messages::HashedLaneId,
                         nonce: ::core::primitive::u64,
                     },
                     #[codec(index = 1)]
                     MessagesReceived(
                         runtime_types::bp_messages::ReceivedMessages<
                             runtime_types::pallet_xcm_bridge::dispatcher::XcmBlobMessageDispatchResult,
-                            ::bp_messages::LegacyLaneId,
+                            ::bp_messages::HashedLaneId,
                         >,
                     ),
                     #[codec(index = 2)]
                     MessagesDelivered {
-                        lane_id: ::bp_messages::LegacyLaneId,
+                        lane_id: ::bp_messages::HashedLaneId,
                         messages: runtime_types::bp_messages::DeliveredMessages,
                     },
                 }
@@ -2954,7 +2956,7 @@ pub mod api {
 						parachain_heads_proof: ::bp_polkadot_core::parachains::ParaHeadsProof,
 					},
 					#[codec(index = 1)]
-					set_owner { new_owner: ::core::option::Option<::bp_moonbeam::AccountId> },
+					set_owner { new_owner: ::core::option::Option<::bp_moonriver::AccountId> },
 					#[codec(index = 2)]
 					set_operating_mode {
 						operating_mode: runtime_types::bp_runtime::BasicOperatingMode,
@@ -3022,8 +3024,8 @@ pub mod api {
 					#[codec(index = 0)]
 					set_members {
 						new_members:
-							::subxt::ext::subxt_core::alloc::vec::Vec<::bp_moonbeam::AccountId>,
-						prime: ::core::option::Option<::bp_moonbeam::AccountId>,
+							::subxt::ext::subxt_core::alloc::vec::Vec<::bp_moonriver::AccountId>,
+						prime: ::core::option::Option<::bp_moonriver::AccountId>,
 						old_count: ::core::primitive::u32,
 					},
 					#[codec(index = 1)]
@@ -3092,14 +3094,14 @@ pub mod api {
 				pub enum Event {
 					#[codec(index = 0)]
 					Proposed {
-						account: ::bp_moonbeam::AccountId,
+						account: ::bp_moonriver::AccountId,
 						proposal_index: ::core::primitive::u32,
 						proposal_hash: ::subxt::ext::subxt_core::utils::H256,
 						threshold: ::core::primitive::u32,
 					},
 					#[codec(index = 1)]
 					Voted {
-						account: ::bp_moonbeam::AccountId,
+						account: ::bp_moonriver::AccountId,
 						proposal_hash: ::subxt::ext::subxt_core::utils::H256,
 						voted: ::core::primitive::bool,
 						yes: ::core::primitive::u32,
@@ -3184,14 +3186,14 @@ pub mod api {
 					#[codec(index = 1)]
 					delegate {
 						class: ::core::primitive::u16,
-						to: ::bp_moonbeam::AccountId,
+						to: ::bp_moonriver::AccountId,
 						conviction: runtime_types::pallet_conviction_voting::conviction::Conviction,
 						balance: ::core::primitive::u128,
 					},
 					#[codec(index = 2)]
 					undelegate { class: ::core::primitive::u16 },
 					#[codec(index = 3)]
-					unlock { class: ::core::primitive::u16, target: ::bp_moonbeam::AccountId },
+					unlock { class: ::core::primitive::u16, target: ::bp_moonriver::AccountId },
 					#[codec(index = 4)]
 					remove_vote {
 						class: ::core::option::Option<::core::primitive::u16>,
@@ -3199,7 +3201,7 @@ pub mod api {
 					},
 					#[codec(index = 5)]
 					remove_other_vote {
-						target: ::bp_moonbeam::AccountId,
+						target: ::bp_moonriver::AccountId,
 						class: ::core::primitive::u16,
 						index: ::core::primitive::u32,
 					},
@@ -3234,19 +3236,19 @@ pub mod api {
 				#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
 				pub enum Event {
 					#[codec(index = 0)]
-					Delegated(::bp_moonbeam::AccountId, ::bp_moonbeam::AccountId),
+					Delegated(::bp_moonriver::AccountId, ::bp_moonriver::AccountId),
 					#[codec(index = 1)]
-					Undelegated(::bp_moonbeam::AccountId),
+					Undelegated(::bp_moonriver::AccountId),
 					#[codec(index = 2)]
 					Voted {
-						who: ::bp_moonbeam::AccountId,
+						who: ::bp_moonriver::AccountId,
 						vote: runtime_types::pallet_conviction_voting::vote::AccountVote<
 							::core::primitive::u128,
 						>,
 					},
 					#[codec(index = 3)]
 					VoteRemoved {
-						who: ::bp_moonbeam::AccountId,
+						who: ::bp_moonriver::AccountId,
 						vote: runtime_types::pallet_conviction_voting::vote::AccountVote<
 							::core::primitive::u128,
 						>,
@@ -3333,14 +3335,14 @@ pub mod api {
 				pub enum Call {
 					#[codec(index = 0)]
 					associate_native_identity {
-						reward_account: ::bp_moonbeam::AccountId,
+						reward_account: ::bp_moonriver::AccountId,
 						relay_account: [::core::primitive::u8; 32usize],
 						proof: runtime_types::sp_runtime::MultiSignature,
 					},
 					#[codec(index = 1)]
 					change_association_with_relay_keys {
-						reward_account: ::bp_moonbeam::AccountId,
-						previous_account: ::bp_moonbeam::AccountId,
+						reward_account: ::bp_moonriver::AccountId,
+						previous_account: ::bp_moonriver::AccountId,
 						proofs: ::subxt::ext::subxt_core::alloc::vec::Vec<(
 							[::core::primitive::u8; 32usize],
 							runtime_types::sp_runtime::MultiSignature,
@@ -3349,14 +3351,14 @@ pub mod api {
 					#[codec(index = 2)]
 					claim,
 					#[codec(index = 3)]
-					update_reward_address { new_reward_account: ::bp_moonbeam::AccountId },
+					update_reward_address { new_reward_account: ::bp_moonriver::AccountId },
 					#[codec(index = 4)]
 					complete_initialization { lease_ending_block: ::core::primitive::u32 },
 					#[codec(index = 5)]
 					initialize_reward_vec {
 						rewards: ::subxt::ext::subxt_core::alloc::vec::Vec<(
 							[::core::primitive::u8; 32usize],
-							::core::option::Option<::bp_moonbeam::AccountId>,
+							::core::option::Option<::bp_moonriver::AccountId>,
 							::core::primitive::u128,
 						)>,
 					},
@@ -3397,27 +3399,27 @@ pub mod api {
 				#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
 				pub enum Event {
 					#[codec(index = 0)]
-					InitialPaymentMade(::bp_moonbeam::AccountId, ::core::primitive::u128),
+					InitialPaymentMade(::bp_moonriver::AccountId, ::core::primitive::u128),
 					#[codec(index = 1)]
 					NativeIdentityAssociated(
 						[::core::primitive::u8; 32usize],
-						::bp_moonbeam::AccountId,
+						::bp_moonriver::AccountId,
 						::core::primitive::u128,
 					),
 					#[codec(index = 2)]
-					RewardsPaid(::bp_moonbeam::AccountId, ::core::primitive::u128),
+					RewardsPaid(::bp_moonriver::AccountId, ::core::primitive::u128),
 					#[codec(index = 3)]
-					RewardAddressUpdated(::bp_moonbeam::AccountId, ::bp_moonbeam::AccountId),
+					RewardAddressUpdated(::bp_moonriver::AccountId, ::bp_moonriver::AccountId),
 					#[codec(index = 4)]
 					InitializedAlreadyInitializedAccount(
 						[::core::primitive::u8; 32usize],
-						::core::option::Option<::bp_moonbeam::AccountId>,
+						::core::option::Option<::bp_moonriver::AccountId>,
 						::core::primitive::u128,
 					),
 					#[codec(index = 5)]
 					InitializedAccountWithNotEnoughContribution(
 						[::core::primitive::u8; 32usize],
-						::core::option::Option<::bp_moonbeam::AccountId>,
+						::core::option::Option<::bp_moonriver::AccountId>,
 						::core::primitive::u128,
 					),
 				}
@@ -3686,7 +3688,7 @@ pub mod api {
 				#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
 				pub enum Call {
 					#[codec(index = 0)]
-					add_registrar { account: ::bp_moonbeam::AccountId },
+					add_registrar { account: ::bp_moonriver::AccountId },
 					#[codec(index = 1)]
 					set_identity {
 						info: ::subxt::ext::subxt_core::alloc::boxed::Box<
@@ -3696,7 +3698,7 @@ pub mod api {
 					#[codec(index = 2)]
 					set_subs {
 						subs: ::subxt::ext::subxt_core::alloc::vec::Vec<(
-							::bp_moonbeam::AccountId,
+							::bp_moonriver::AccountId,
 							runtime_types::pallet_identity::types::Data,
 						)>,
 					},
@@ -3722,7 +3724,7 @@ pub mod api {
 					set_account_id {
 						#[codec(compact)]
 						index: ::core::primitive::u32,
-						new: ::bp_moonbeam::AccountId,
+						new: ::bp_moonriver::AccountId,
 					},
 					#[codec(index = 8)]
 					set_fields {
@@ -3734,39 +3736,39 @@ pub mod api {
 					provide_judgement {
 						#[codec(compact)]
 						reg_index: ::core::primitive::u32,
-						target: ::bp_moonbeam::AccountId,
+						target: ::bp_moonriver::AccountId,
 						judgement: runtime_types::pallet_identity::types::Judgement<
 							::core::primitive::u128,
 						>,
 						identity: ::subxt::ext::subxt_core::utils::H256,
 					},
 					#[codec(index = 10)]
-					kill_identity { target: ::bp_moonbeam::AccountId },
+					kill_identity { target: ::bp_moonriver::AccountId },
 					#[codec(index = 11)]
 					add_sub {
-						sub: ::bp_moonbeam::AccountId,
+						sub: ::bp_moonriver::AccountId,
 						data: runtime_types::pallet_identity::types::Data,
 					},
 					#[codec(index = 12)]
 					rename_sub {
-						sub: ::bp_moonbeam::AccountId,
+						sub: ::bp_moonriver::AccountId,
 						data: runtime_types::pallet_identity::types::Data,
 					},
 					#[codec(index = 13)]
-					remove_sub { sub: ::bp_moonbeam::AccountId },
+					remove_sub { sub: ::bp_moonriver::AccountId },
 					#[codec(index = 14)]
 					quit_sub,
 					#[codec(index = 15)]
 					add_username_authority {
-						authority: ::bp_moonbeam::AccountId,
+						authority: ::bp_moonriver::AccountId,
 						suffix: ::subxt::ext::subxt_core::alloc::vec::Vec<::core::primitive::u8>,
 						allocation: ::core::primitive::u32,
 					},
 					#[codec(index = 16)]
-					remove_username_authority { authority: ::bp_moonbeam::AccountId },
+					remove_username_authority { authority: ::bp_moonriver::AccountId },
 					#[codec(index = 17)]
 					set_username_for {
-						who: ::bp_moonbeam::AccountId,
+						who: ::bp_moonriver::AccountId,
 						username: ::subxt::ext::subxt_core::alloc::vec::Vec<::core::primitive::u8>,
 						signature:
 							::core::option::Option<runtime_types::account::EthereumSignature>,
@@ -3854,83 +3856,83 @@ pub mod api {
 				#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
 				pub enum Event {
 					#[codec(index = 0)]
-					IdentitySet { who: ::bp_moonbeam::AccountId },
+					IdentitySet { who: ::bp_moonriver::AccountId },
 					#[codec(index = 1)]
 					IdentityCleared {
-						who: ::bp_moonbeam::AccountId,
+						who: ::bp_moonriver::AccountId,
 						deposit: ::core::primitive::u128,
 					},
 					#[codec(index = 2)]
 					IdentityKilled {
-						who: ::bp_moonbeam::AccountId,
+						who: ::bp_moonriver::AccountId,
 						deposit: ::core::primitive::u128,
 					},
 					#[codec(index = 3)]
 					JudgementRequested {
-						who: ::bp_moonbeam::AccountId,
+						who: ::bp_moonriver::AccountId,
 						registrar_index: ::core::primitive::u32,
 					},
 					#[codec(index = 4)]
 					JudgementUnrequested {
-						who: ::bp_moonbeam::AccountId,
+						who: ::bp_moonriver::AccountId,
 						registrar_index: ::core::primitive::u32,
 					},
 					#[codec(index = 5)]
 					JudgementGiven {
-						target: ::bp_moonbeam::AccountId,
+						target: ::bp_moonriver::AccountId,
 						registrar_index: ::core::primitive::u32,
 					},
 					#[codec(index = 6)]
 					RegistrarAdded { registrar_index: ::core::primitive::u32 },
 					#[codec(index = 7)]
 					SubIdentityAdded {
-						sub: ::bp_moonbeam::AccountId,
-						main: ::bp_moonbeam::AccountId,
+						sub: ::bp_moonriver::AccountId,
+						main: ::bp_moonriver::AccountId,
 						deposit: ::core::primitive::u128,
 					},
 					#[codec(index = 8)]
 					SubIdentityRemoved {
-						sub: ::bp_moonbeam::AccountId,
-						main: ::bp_moonbeam::AccountId,
+						sub: ::bp_moonriver::AccountId,
+						main: ::bp_moonriver::AccountId,
 						deposit: ::core::primitive::u128,
 					},
 					#[codec(index = 9)]
 					SubIdentityRevoked {
-						sub: ::bp_moonbeam::AccountId,
-						main: ::bp_moonbeam::AccountId,
+						sub: ::bp_moonriver::AccountId,
+						main: ::bp_moonriver::AccountId,
 						deposit: ::core::primitive::u128,
 					},
 					#[codec(index = 10)]
-					AuthorityAdded { authority: ::bp_moonbeam::AccountId },
+					AuthorityAdded { authority: ::bp_moonriver::AccountId },
 					#[codec(index = 11)]
-					AuthorityRemoved { authority: ::bp_moonbeam::AccountId },
+					AuthorityRemoved { authority: ::bp_moonriver::AccountId },
 					#[codec(index = 12)]
 					UsernameSet {
-						who: ::bp_moonbeam::AccountId,
+						who: ::bp_moonriver::AccountId,
 						username: runtime_types::bounded_collections::bounded_vec::BoundedVec<
 							::core::primitive::u8,
 						>,
 					},
 					#[codec(index = 13)]
 					UsernameQueued {
-						who: ::bp_moonbeam::AccountId,
+						who: ::bp_moonriver::AccountId,
 						username: runtime_types::bounded_collections::bounded_vec::BoundedVec<
 							::core::primitive::u8,
 						>,
 						expiration: ::core::primitive::u32,
 					},
 					#[codec(index = 14)]
-					PreapprovalExpired { whose: ::bp_moonbeam::AccountId },
+					PreapprovalExpired { whose: ::bp_moonriver::AccountId },
 					#[codec(index = 15)]
 					PrimaryUsernameSet {
-						who: ::bp_moonbeam::AccountId,
+						who: ::bp_moonriver::AccountId,
 						username: runtime_types::bounded_collections::bounded_vec::BoundedVec<
 							::core::primitive::u8,
 						>,
 					},
 					#[codec(index = 16)]
 					DanglingUsernameRemoved {
-						who: ::bp_moonbeam::AccountId,
+						who: ::bp_moonriver::AccountId,
 						username: runtime_types::bounded_collections::bounded_vec::BoundedVec<
 							::core::primitive::u8,
 						>,
@@ -4239,7 +4241,7 @@ pub mod api {
 				use super::runtime_types;
 				#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
 				pub struct AssetDepositDetails<_0> {
-					pub deposit_account: ::bp_moonbeam::AccountId,
+					pub deposit_account: ::bp_moonriver::AccountId,
 					pub deposit: ::core::primitive::u128,
 					#[codec(skip)]
 					pub __ignore: ::core::marker::PhantomData<_0>,
@@ -4337,7 +4339,7 @@ pub mod api {
 					},
 					#[codec(index = 4)]
 					TokensLocked(
-						::bp_moonbeam::AccountId,
+						::bp_moonriver::AccountId,
 						::core::primitive::u128,
 						runtime_types::primitive_types::U256,
 					),
@@ -4449,19 +4451,19 @@ pub mod api {
 				#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
 				pub enum Call {
 					#[codec(index = 0)]
-					collator_add_orbiter { orbiter: ::bp_moonbeam::AccountId },
+					collator_add_orbiter { orbiter: ::bp_moonriver::AccountId },
 					#[codec(index = 1)]
-					collator_remove_orbiter { orbiter: ::bp_moonbeam::AccountId },
+					collator_remove_orbiter { orbiter: ::bp_moonriver::AccountId },
 					#[codec(index = 2)]
-					orbiter_leave_collator_pool { collator: ::bp_moonbeam::AccountId },
+					orbiter_leave_collator_pool { collator: ::bp_moonriver::AccountId },
 					#[codec(index = 3)]
 					orbiter_register,
 					#[codec(index = 4)]
 					orbiter_unregister { collators_pool_count: ::core::primitive::u32 },
 					#[codec(index = 5)]
-					add_collator { collator: ::bp_moonbeam::AccountId },
+					add_collator { collator: ::bp_moonriver::AccountId },
 					#[codec(index = 6)]
-					remove_collator { collator: ::bp_moonbeam::AccountId },
+					remove_collator { collator: ::bp_moonriver::AccountId },
 				}
 				#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
 				pub enum Error {
@@ -4488,32 +4490,32 @@ pub mod api {
 				pub enum Event {
 					#[codec(index = 0)]
 					OrbiterJoinCollatorPool {
-						collator: ::bp_moonbeam::AccountId,
-						orbiter: ::bp_moonbeam::AccountId,
+						collator: ::bp_moonriver::AccountId,
+						orbiter: ::bp_moonriver::AccountId,
 					},
 					#[codec(index = 1)]
 					OrbiterLeaveCollatorPool {
-						collator: ::bp_moonbeam::AccountId,
-						orbiter: ::bp_moonbeam::AccountId,
+						collator: ::bp_moonriver::AccountId,
+						orbiter: ::bp_moonriver::AccountId,
 					},
 					#[codec(index = 2)]
 					OrbiterRewarded {
-						account: ::bp_moonbeam::AccountId,
+						account: ::bp_moonriver::AccountId,
 						rewards: ::core::primitive::u128,
 					},
 					#[codec(index = 3)]
 					OrbiterRotation {
-						collator: ::bp_moonbeam::AccountId,
-						old_orbiter: ::core::option::Option<::bp_moonbeam::AccountId>,
-						new_orbiter: ::core::option::Option<::bp_moonbeam::AccountId>,
+						collator: ::bp_moonriver::AccountId,
+						old_orbiter: ::core::option::Option<::bp_moonriver::AccountId>,
+						new_orbiter: ::core::option::Option<::bp_moonriver::AccountId>,
 					},
 					#[codec(index = 4)]
 					OrbiterRegistered {
-						account: ::bp_moonbeam::AccountId,
+						account: ::bp_moonriver::AccountId,
 						deposit: ::core::primitive::u128,
 					},
 					#[codec(index = 5)]
-					OrbiterUnregistered { account: ::bp_moonbeam::AccountId },
+					OrbiterUnregistered { account: ::bp_moonriver::AccountId },
 				}
 			}
 			pub mod types {
@@ -4542,7 +4544,7 @@ pub mod api {
 					#[codec(index = 0)]
 					as_multi_threshold_1 {
 						other_signatories:
-							::subxt::ext::subxt_core::alloc::vec::Vec<::bp_moonbeam::AccountId>,
+							::subxt::ext::subxt_core::alloc::vec::Vec<::bp_moonriver::AccountId>,
 						call: ::subxt::ext::subxt_core::alloc::boxed::Box<
 							runtime_types::moonriver_runtime::RuntimeCall,
 						>,
@@ -4551,7 +4553,7 @@ pub mod api {
 					as_multi {
 						threshold: ::core::primitive::u16,
 						other_signatories:
-							::subxt::ext::subxt_core::alloc::vec::Vec<::bp_moonbeam::AccountId>,
+							::subxt::ext::subxt_core::alloc::vec::Vec<::bp_moonriver::AccountId>,
 						maybe_timepoint: ::core::option::Option<
 							runtime_types::pallet_multisig::Timepoint<::core::primitive::u32>,
 						>,
@@ -4564,7 +4566,7 @@ pub mod api {
 					approve_as_multi {
 						threshold: ::core::primitive::u16,
 						other_signatories:
-							::subxt::ext::subxt_core::alloc::vec::Vec<::bp_moonbeam::AccountId>,
+							::subxt::ext::subxt_core::alloc::vec::Vec<::bp_moonriver::AccountId>,
 						maybe_timepoint: ::core::option::Option<
 							runtime_types::pallet_multisig::Timepoint<::core::primitive::u32>,
 						>,
@@ -4575,7 +4577,7 @@ pub mod api {
 					cancel_as_multi {
 						threshold: ::core::primitive::u16,
 						other_signatories:
-							::subxt::ext::subxt_core::alloc::vec::Vec<::bp_moonbeam::AccountId>,
+							::subxt::ext::subxt_core::alloc::vec::Vec<::bp_moonriver::AccountId>,
 						timepoint:
 							runtime_types::pallet_multisig::Timepoint<::core::primitive::u32>,
 						call_hash: [::core::primitive::u8; 32usize],
@@ -4616,34 +4618,34 @@ pub mod api {
 				pub enum Event {
 					#[codec(index = 0)]
 					NewMultisig {
-						approving: ::bp_moonbeam::AccountId,
-						multisig: ::bp_moonbeam::AccountId,
+						approving: ::bp_moonriver::AccountId,
+						multisig: ::bp_moonriver::AccountId,
 						call_hash: [::core::primitive::u8; 32usize],
 					},
 					#[codec(index = 1)]
 					MultisigApproval {
-						approving: ::bp_moonbeam::AccountId,
+						approving: ::bp_moonriver::AccountId,
 						timepoint:
 							runtime_types::pallet_multisig::Timepoint<::core::primitive::u32>,
-						multisig: ::bp_moonbeam::AccountId,
+						multisig: ::bp_moonriver::AccountId,
 						call_hash: [::core::primitive::u8; 32usize],
 					},
 					#[codec(index = 2)]
 					MultisigExecuted {
-						approving: ::bp_moonbeam::AccountId,
+						approving: ::bp_moonriver::AccountId,
 						timepoint:
 							runtime_types::pallet_multisig::Timepoint<::core::primitive::u32>,
-						multisig: ::bp_moonbeam::AccountId,
+						multisig: ::bp_moonriver::AccountId,
 						call_hash: [::core::primitive::u8; 32usize],
 						result:
 							::core::result::Result<(), runtime_types::sp_runtime::DispatchError>,
 					},
 					#[codec(index = 3)]
 					MultisigCancelled {
-						cancelling: ::bp_moonbeam::AccountId,
+						cancelling: ::bp_moonriver::AccountId,
 						timepoint:
 							runtime_types::pallet_multisig::Timepoint<::core::primitive::u32>,
-						multisig: ::bp_moonbeam::AccountId,
+						multisig: ::bp_moonriver::AccountId,
 						call_hash: [::core::primitive::u8; 32usize],
 					},
 				}
@@ -4732,7 +4734,7 @@ pub mod api {
                         >,
                     },
                     #[codec(index = 2)]
-                    set_parachain_bond_account { new: ::bp_moonbeam::AccountId },
+                    set_parachain_bond_account { new: ::bp_moonriver::AccountId },
                     #[codec(index = 3)]
                     set_parachain_bond_reserve_percent {
                         new: runtime_types::sp_arithmetic::per_things::Percent,
@@ -4756,7 +4758,7 @@ pub mod api {
                     },
                     #[codec(index = 9)]
                     execute_leave_candidates {
-                        candidate: ::bp_moonbeam::AccountId,
+                        candidate: ::bp_moonriver::AccountId,
                         candidate_delegation_count: ::core::primitive::u32,
                     },
                     #[codec(index = 10)]
@@ -4770,12 +4772,12 @@ pub mod api {
                     #[codec(index = 14)]
                     schedule_candidate_bond_less { less: ::core::primitive::u128 },
                     #[codec(index = 15)]
-                    execute_candidate_bond_less { candidate: ::bp_moonbeam::AccountId },
+                    execute_candidate_bond_less { candidate: ::bp_moonriver::AccountId },
                     #[codec(index = 16)]
                     cancel_candidate_bond_less,
                     #[codec(index = 18)]
                     delegate_with_auto_compound {
-                        candidate: ::bp_moonbeam::AccountId,
+                        candidate: ::bp_moonriver::AccountId,
                         amount: ::core::primitive::u128,
                         auto_compound: runtime_types::sp_arithmetic::per_things::Percent,
                         candidate_delegation_count: ::core::primitive::u32,
@@ -4783,27 +4785,27 @@ pub mod api {
                         delegation_count: ::core::primitive::u32,
                     },
                     #[codec(index = 22)]
-                    schedule_revoke_delegation { collator: ::bp_moonbeam::AccountId },
+                    schedule_revoke_delegation { collator: ::bp_moonriver::AccountId },
                     #[codec(index = 23)]
                     delegator_bond_more {
-                        candidate: ::bp_moonbeam::AccountId,
+                        candidate: ::bp_moonriver::AccountId,
                         more: ::core::primitive::u128,
                     },
                     #[codec(index = 24)]
                     schedule_delegator_bond_less {
-                        candidate: ::bp_moonbeam::AccountId,
+                        candidate: ::bp_moonriver::AccountId,
                         less: ::core::primitive::u128,
                     },
                     #[codec(index = 25)]
                     execute_delegation_request {
-                        delegator: ::bp_moonbeam::AccountId,
-                        candidate: ::bp_moonbeam::AccountId,
+                        delegator: ::bp_moonriver::AccountId,
+                        candidate: ::bp_moonriver::AccountId,
                     },
                     #[codec(index = 26)]
-                    cancel_delegation_request { candidate: ::bp_moonbeam::AccountId },
+                    cancel_delegation_request { candidate: ::bp_moonriver::AccountId },
                     #[codec(index = 27)]
                     set_auto_compound {
-                        candidate: ::bp_moonbeam::AccountId,
+                        candidate: ::bp_moonriver::AccountId,
                         value: runtime_types::sp_arithmetic::per_things::Percent,
                         candidate_auto_compounding_delegation_count_hint: ::core::primitive::u32,
                         delegation_count_hint: ::core::primitive::u32,
@@ -4811,23 +4813,23 @@ pub mod api {
                     #[codec(index = 28)]
                     hotfix_remove_delegation_requests_exited_candidates {
                         candidates: ::subxt::ext::subxt_core::alloc::vec::Vec<
-                            ::bp_moonbeam::AccountId,
+                            ::bp_moonriver::AccountId,
                         >,
                     },
                     #[codec(index = 29)]
-                    notify_inactive_collator { collator: ::bp_moonbeam::AccountId },
+                    notify_inactive_collator { collator: ::bp_moonriver::AccountId },
                     #[codec(index = 30)]
                     enable_marking_offline { value: ::core::primitive::bool },
                     #[codec(index = 31)]
                     force_join_candidates {
-                        account: ::bp_moonbeam::AccountId,
+                        account: ::bp_moonriver::AccountId,
                         bond: ::core::primitive::u128,
                         candidate_count: ::core::primitive::u32,
                     },
                     #[codec(index = 32)]
                     set_inflation_distribution_config {
                         new: runtime_types::pallet_parachain_staking::types::InflationDistributionConfig<
-                            ::bp_moonbeam::AccountId,
+                            ::bp_moonriver::AccountId,
                         >,
                     },
                 }
@@ -4955,124 +4957,124 @@ pub mod api {
                     },
                     #[codec(index = 1)]
                     JoinedCollatorCandidates {
-                        account: ::bp_moonbeam::AccountId,
+                        account: ::bp_moonriver::AccountId,
                         amount_locked: ::core::primitive::u128,
                         new_total_amt_locked: ::core::primitive::u128,
                     },
                     #[codec(index = 2)]
                     CollatorChosen {
                         round: ::core::primitive::u32,
-                        collator_account: ::bp_moonbeam::AccountId,
+                        collator_account: ::bp_moonriver::AccountId,
                         total_exposed_amount: ::core::primitive::u128,
                     },
                     #[codec(index = 3)]
                     CandidateBondLessRequested {
-                        candidate: ::bp_moonbeam::AccountId,
+                        candidate: ::bp_moonriver::AccountId,
                         amount_to_decrease: ::core::primitive::u128,
                         execute_round: ::core::primitive::u32,
                     },
                     #[codec(index = 4)]
                     CandidateBondedMore {
-                        candidate: ::bp_moonbeam::AccountId,
+                        candidate: ::bp_moonriver::AccountId,
                         amount: ::core::primitive::u128,
                         new_total_bond: ::core::primitive::u128,
                     },
                     #[codec(index = 5)]
                     CandidateBondedLess {
-                        candidate: ::bp_moonbeam::AccountId,
+                        candidate: ::bp_moonriver::AccountId,
                         amount: ::core::primitive::u128,
                         new_bond: ::core::primitive::u128,
                     },
                     #[codec(index = 6)]
-                    CandidateWentOffline { candidate: ::bp_moonbeam::AccountId },
+                    CandidateWentOffline { candidate: ::bp_moonriver::AccountId },
                     #[codec(index = 7)]
-                    CandidateBackOnline { candidate: ::bp_moonbeam::AccountId },
+                    CandidateBackOnline { candidate: ::bp_moonriver::AccountId },
                     #[codec(index = 8)]
                     CandidateScheduledExit {
                         exit_allowed_round: ::core::primitive::u32,
-                        candidate: ::bp_moonbeam::AccountId,
+                        candidate: ::bp_moonriver::AccountId,
                         scheduled_exit: ::core::primitive::u32,
                     },
                     #[codec(index = 9)]
-                    CancelledCandidateExit { candidate: ::bp_moonbeam::AccountId },
+                    CancelledCandidateExit { candidate: ::bp_moonriver::AccountId },
                     #[codec(index = 10)]
                     CancelledCandidateBondLess {
-                        candidate: ::bp_moonbeam::AccountId,
+                        candidate: ::bp_moonriver::AccountId,
                         amount: ::core::primitive::u128,
                         execute_round: ::core::primitive::u32,
                     },
                     #[codec(index = 11)]
                     CandidateLeft {
-                        ex_candidate: ::bp_moonbeam::AccountId,
+                        ex_candidate: ::bp_moonriver::AccountId,
                         unlocked_amount: ::core::primitive::u128,
                         new_total_amt_locked: ::core::primitive::u128,
                     },
                     #[codec(index = 12)]
                     DelegationDecreaseScheduled {
-                        delegator: ::bp_moonbeam::AccountId,
-                        candidate: ::bp_moonbeam::AccountId,
+                        delegator: ::bp_moonriver::AccountId,
+                        candidate: ::bp_moonriver::AccountId,
                         amount_to_decrease: ::core::primitive::u128,
                         execute_round: ::core::primitive::u32,
                     },
                     #[codec(index = 13)]
                     DelegationIncreased {
-                        delegator: ::bp_moonbeam::AccountId,
-                        candidate: ::bp_moonbeam::AccountId,
+                        delegator: ::bp_moonriver::AccountId,
+                        candidate: ::bp_moonriver::AccountId,
                         amount: ::core::primitive::u128,
                         in_top: ::core::primitive::bool,
                     },
                     #[codec(index = 14)]
                     DelegationDecreased {
-                        delegator: ::bp_moonbeam::AccountId,
-                        candidate: ::bp_moonbeam::AccountId,
+                        delegator: ::bp_moonriver::AccountId,
+                        candidate: ::bp_moonriver::AccountId,
                         amount: ::core::primitive::u128,
                         in_top: ::core::primitive::bool,
                     },
                     #[codec(index = 15)]
                     DelegatorExitScheduled {
                         round: ::core::primitive::u32,
-                        delegator: ::bp_moonbeam::AccountId,
+                        delegator: ::bp_moonriver::AccountId,
                         scheduled_exit: ::core::primitive::u32,
                     },
                     #[codec(index = 16)]
                     DelegationRevocationScheduled {
                         round: ::core::primitive::u32,
-                        delegator: ::bp_moonbeam::AccountId,
-                        candidate: ::bp_moonbeam::AccountId,
+                        delegator: ::bp_moonriver::AccountId,
+                        candidate: ::bp_moonriver::AccountId,
                         scheduled_exit: ::core::primitive::u32,
                     },
                     #[codec(index = 17)]
                     DelegatorLeft {
-                        delegator: ::bp_moonbeam::AccountId,
+                        delegator: ::bp_moonriver::AccountId,
                         unstaked_amount: ::core::primitive::u128,
                     },
                     #[codec(index = 18)]
                     DelegationRevoked {
-                        delegator: ::bp_moonbeam::AccountId,
-                        candidate: ::bp_moonbeam::AccountId,
+                        delegator: ::bp_moonriver::AccountId,
+                        candidate: ::bp_moonriver::AccountId,
                         unstaked_amount: ::core::primitive::u128,
                     },
                     #[codec(index = 19)]
                     DelegationKicked {
-                        delegator: ::bp_moonbeam::AccountId,
-                        candidate: ::bp_moonbeam::AccountId,
+                        delegator: ::bp_moonriver::AccountId,
+                        candidate: ::bp_moonriver::AccountId,
                         unstaked_amount: ::core::primitive::u128,
                     },
                     #[codec(index = 20)]
-                    DelegatorExitCancelled { delegator: ::bp_moonbeam::AccountId },
+                    DelegatorExitCancelled { delegator: ::bp_moonriver::AccountId },
                     #[codec(index = 21)]
                     CancelledDelegationRequest {
-                        delegator: ::bp_moonbeam::AccountId,
+                        delegator: ::bp_moonriver::AccountId,
                         cancelled_request: runtime_types::pallet_parachain_staking::delegation_requests::CancelledScheduledRequest<
                             ::core::primitive::u128,
                         >,
-                        collator: ::bp_moonbeam::AccountId,
+                        collator: ::bp_moonriver::AccountId,
                     },
                     #[codec(index = 22)]
                     Delegation {
-                        delegator: ::bp_moonbeam::AccountId,
+                        delegator: ::bp_moonriver::AccountId,
                         locked_amount: ::core::primitive::u128,
-                        candidate: ::bp_moonbeam::AccountId,
+                        candidate: ::bp_moonriver::AccountId,
                         delegator_position: runtime_types::pallet_parachain_staking::types::DelegatorAdded<
                             ::core::primitive::u128,
                         >,
@@ -5080,29 +5082,29 @@ pub mod api {
                     },
                     #[codec(index = 23)]
                     DelegatorLeftCandidate {
-                        delegator: ::bp_moonbeam::AccountId,
-                        candidate: ::bp_moonbeam::AccountId,
+                        delegator: ::bp_moonriver::AccountId,
+                        candidate: ::bp_moonriver::AccountId,
                         unstaked_amount: ::core::primitive::u128,
                         total_candidate_staked: ::core::primitive::u128,
                     },
                     #[codec(index = 24)]
                     Rewarded {
-                        account: ::bp_moonbeam::AccountId,
+                        account: ::bp_moonriver::AccountId,
                         rewards: ::core::primitive::u128,
                     },
                     #[codec(index = 25)]
                     InflationDistributed {
                         index: ::core::primitive::u32,
-                        account: ::bp_moonbeam::AccountId,
+                        account: ::bp_moonriver::AccountId,
                         value: ::core::primitive::u128,
                     },
                     #[codec(index = 26)]
                     InflationDistributionConfigUpdated {
                         old: runtime_types::pallet_parachain_staking::types::InflationDistributionConfig<
-                            ::bp_moonbeam::AccountId,
+                            ::bp_moonriver::AccountId,
                         >,
                         new: runtime_types::pallet_parachain_staking::types::InflationDistributionConfig<
-                            ::bp_moonbeam::AccountId,
+                            ::bp_moonriver::AccountId,
                         >,
                     },
                     #[codec(index = 27)]
@@ -5142,14 +5144,14 @@ pub mod api {
                     },
                     #[codec(index = 32)]
                     AutoCompoundSet {
-                        candidate: ::bp_moonbeam::AccountId,
-                        delegator: ::bp_moonbeam::AccountId,
+                        candidate: ::bp_moonriver::AccountId,
+                        delegator: ::bp_moonriver::AccountId,
                         value: runtime_types::sp_arithmetic::per_things::Percent,
                     },
                     #[codec(index = 33)]
                     Compounded {
-                        candidate: ::bp_moonbeam::AccountId,
-                        delegator: ::bp_moonbeam::AccountId,
+                        candidate: ::bp_moonriver::AccountId,
+                        delegator: ::bp_moonriver::AccountId,
                         amount: ::core::primitive::u128,
                     },
                 }
@@ -5412,7 +5414,7 @@ pub mod api {
 				pub enum Call {
 					#[codec(index = 0)]
 					proxy {
-						real: ::bp_moonbeam::AccountId,
+						real: ::bp_moonriver::AccountId,
 						force_proxy_type:
 							::core::option::Option<runtime_types::moonriver_runtime::ProxyType>,
 						call: ::subxt::ext::subxt_core::alloc::boxed::Box<
@@ -5421,13 +5423,13 @@ pub mod api {
 					},
 					#[codec(index = 1)]
 					add_proxy {
-						delegate: ::bp_moonbeam::AccountId,
+						delegate: ::bp_moonriver::AccountId,
 						proxy_type: runtime_types::moonriver_runtime::ProxyType,
 						delay: ::core::primitive::u32,
 					},
 					#[codec(index = 2)]
 					remove_proxy {
-						delegate: ::bp_moonbeam::AccountId,
+						delegate: ::bp_moonriver::AccountId,
 						proxy_type: runtime_types::moonriver_runtime::ProxyType,
 						delay: ::core::primitive::u32,
 					},
@@ -5441,7 +5443,7 @@ pub mod api {
 					},
 					#[codec(index = 5)]
 					kill_pure {
-						spawner: ::bp_moonbeam::AccountId,
+						spawner: ::bp_moonriver::AccountId,
 						proxy_type: runtime_types::moonriver_runtime::ProxyType,
 						index: ::core::primitive::u16,
 						#[codec(compact)]
@@ -5451,23 +5453,23 @@ pub mod api {
 					},
 					#[codec(index = 6)]
 					announce {
-						real: ::bp_moonbeam::AccountId,
+						real: ::bp_moonriver::AccountId,
 						call_hash: ::subxt::ext::subxt_core::utils::H256,
 					},
 					#[codec(index = 7)]
 					remove_announcement {
-						real: ::bp_moonbeam::AccountId,
+						real: ::bp_moonriver::AccountId,
 						call_hash: ::subxt::ext::subxt_core::utils::H256,
 					},
 					#[codec(index = 8)]
 					reject_announcement {
-						delegate: ::bp_moonbeam::AccountId,
+						delegate: ::bp_moonriver::AccountId,
 						call_hash: ::subxt::ext::subxt_core::utils::H256,
 					},
 					#[codec(index = 9)]
 					proxy_announced {
-						delegate: ::bp_moonbeam::AccountId,
-						real: ::bp_moonbeam::AccountId,
+						delegate: ::bp_moonriver::AccountId,
+						real: ::bp_moonriver::AccountId,
 						force_proxy_type:
 							::core::option::Option<runtime_types::moonriver_runtime::ProxyType>,
 						call: ::subxt::ext::subxt_core::alloc::boxed::Box<
@@ -5503,28 +5505,28 @@ pub mod api {
 					},
 					#[codec(index = 1)]
 					PureCreated {
-						pure: ::bp_moonbeam::AccountId,
-						who: ::bp_moonbeam::AccountId,
+						pure: ::bp_moonriver::AccountId,
+						who: ::bp_moonriver::AccountId,
 						proxy_type: runtime_types::moonriver_runtime::ProxyType,
 						disambiguation_index: ::core::primitive::u16,
 					},
 					#[codec(index = 2)]
 					Announced {
-						real: ::bp_moonbeam::AccountId,
-						proxy: ::bp_moonbeam::AccountId,
+						real: ::bp_moonriver::AccountId,
+						proxy: ::bp_moonriver::AccountId,
 						call_hash: ::subxt::ext::subxt_core::utils::H256,
 					},
 					#[codec(index = 3)]
 					ProxyAdded {
-						delegator: ::bp_moonbeam::AccountId,
-						delegatee: ::bp_moonbeam::AccountId,
+						delegator: ::bp_moonriver::AccountId,
+						delegatee: ::bp_moonriver::AccountId,
 						proxy_type: runtime_types::moonriver_runtime::ProxyType,
 						delay: ::core::primitive::u32,
 					},
 					#[codec(index = 4)]
 					ProxyRemoved {
-						delegator: ::bp_moonbeam::AccountId,
-						delegatee: ::bp_moonbeam::AccountId,
+						delegator: ::bp_moonriver::AccountId,
+						delegatee: ::bp_moonriver::AccountId,
 						proxy_type: runtime_types::moonriver_runtime::ProxyType,
 						delay: ::core::primitive::u32,
 					},
@@ -5740,18 +5742,18 @@ pub mod api {
 					#[codec(index = 1)]
 					DecisionDepositPlaced {
 						index: ::core::primitive::u32,
-						who: ::bp_moonbeam::AccountId,
+						who: ::bp_moonriver::AccountId,
 						amount: ::core::primitive::u128,
 					},
 					#[codec(index = 2)]
 					DecisionDepositRefunded {
 						index: ::core::primitive::u32,
-						who: ::bp_moonbeam::AccountId,
+						who: ::bp_moonriver::AccountId,
 						amount: ::core::primitive::u128,
 					},
 					#[codec(index = 3)]
 					DepositSlashed {
-						who: ::bp_moonbeam::AccountId,
+						who: ::bp_moonriver::AccountId,
 						amount: ::core::primitive::u128,
 					},
 					#[codec(index = 4)]
@@ -5810,7 +5812,7 @@ pub mod api {
 					#[codec(index = 13)]
 					SubmissionDepositRefunded {
 						index: ::core::primitive::u32,
-						who: ::bp_moonbeam::AccountId,
+						who: ::bp_moonriver::AccountId,
 						amount: ::core::primitive::u128,
 					},
 					#[codec(index = 14)]
@@ -6143,7 +6145,7 @@ pub mod api {
 				pub enum Event {
 					#[codec(index = 0)]
 					TransactionFeePaid {
-						who: ::bp_moonbeam::AccountId,
+						who: ::bp_moonriver::AccountId,
 						actual_fee: ::core::primitive::u128,
 						tip: ::core::primitive::u128,
 					},
@@ -6191,7 +6193,7 @@ pub mod api {
 					spend_local {
 						#[codec(compact)]
 						amount: ::core::primitive::u128,
-						beneficiary: ::bp_moonbeam::AccountId,
+						beneficiary: ::bp_moonriver::AccountId,
 					},
 					#[codec(index = 4)]
 					remove_approval {
@@ -6204,7 +6206,7 @@ pub mod api {
 						#[codec(compact)]
 						amount: ::core::primitive::u128,
 						beneficiary:
-							::subxt::ext::subxt_core::alloc::boxed::Box<::bp_moonbeam::AccountId>,
+							::subxt::ext::subxt_core::alloc::boxed::Box<::bp_moonriver::AccountId>,
 						valid_from: ::core::option::Option<::core::primitive::u32>,
 					},
 					#[codec(index = 6)]
@@ -6247,7 +6249,7 @@ pub mod api {
 					Awarded {
 						proposal_index: ::core::primitive::u32,
 						award: ::core::primitive::u128,
-						account: ::bp_moonbeam::AccountId,
+						account: ::bp_moonriver::AccountId,
 					},
 					#[codec(index = 2)]
 					Burnt { burnt_funds: ::core::primitive::u128 },
@@ -6259,7 +6261,7 @@ pub mod api {
 					SpendApproved {
 						proposal_index: ::core::primitive::u32,
 						amount: ::core::primitive::u128,
-						beneficiary: ::bp_moonbeam::AccountId,
+						beneficiary: ::bp_moonriver::AccountId,
 					},
 					#[codec(index = 6)]
 					UpdatedInactive {
@@ -6271,7 +6273,7 @@ pub mod api {
 						index: ::core::primitive::u32,
 						asset_kind: (),
 						amount: ::core::primitive::u128,
-						beneficiary: ::bp_moonbeam::AccountId,
+						beneficiary: ::bp_moonriver::AccountId,
 						valid_from: ::core::primitive::u32,
 						expire_at: ::core::primitive::u32,
 					},
@@ -6907,7 +6909,7 @@ pub mod api {
 						bridge_id: runtime_types::bp_xcm_bridge::BridgeId,
 						bridge_deposit: ::core::option::Option<
 							runtime_types::bp_xcm_bridge::Deposit<
-								::bp_moonbeam::AccountId,
+								::bp_moonriver::AccountId,
 								::core::primitive::u128,
 							>,
 						>,
@@ -6917,22 +6919,22 @@ pub mod api {
 						remote_endpoint: ::subxt::ext::subxt_core::alloc::boxed::Box<
 							runtime_types::staging_xcm::v4::junctions::Junctions,
 						>,
-						lane_id: ::bp_messages::LegacyLaneId,
+						lane_id: ::bp_messages::HashedLaneId,
 					},
 					#[codec(index = 1)]
 					ClosingBridge {
 						bridge_id: runtime_types::bp_xcm_bridge::BridgeId,
-						lane_id: ::bp_messages::LegacyLaneId,
+						lane_id: ::bp_messages::HashedLaneId,
 						pruned_messages: ::core::primitive::u64,
 						enqueued_messages: ::core::primitive::u64,
 					},
 					#[codec(index = 2)]
 					BridgePruned {
 						bridge_id: runtime_types::bp_xcm_bridge::BridgeId,
-						lane_id: ::bp_messages::LegacyLaneId,
+						lane_id: ::bp_messages::HashedLaneId,
 						bridge_deposit: ::core::option::Option<
 							runtime_types::bp_xcm_bridge::Deposit<
-								::bp_moonbeam::AccountId,
+								::bp_moonriver::AccountId,
 								::core::primitive::u128,
 							>,
 						>,
@@ -6988,7 +6990,7 @@ pub mod api {
 				#[derive(::codec::Decode, ::codec::Encode, Clone, Debug, PartialEq)]
 				pub enum Call {
 					#[codec(index = 0)]
-					register { who: ::bp_moonbeam::AccountId, index: ::core::primitive::u16 },
+					register { who: ::bp_moonriver::AccountId, index: ::core::primitive::u16 },
 					#[codec(index = 1)]
 					deregister { index: ::core::primitive::u16 },
 					#[codec(index = 2)]
@@ -7008,7 +7010,7 @@ pub mod api {
 						dest: ::subxt::ext::subxt_core::alloc::boxed::Box<
 							runtime_types::xcm::VersionedLocation,
 						>,
-						fee_payer: ::core::option::Option<::bp_moonbeam::AccountId>,
+						fee_payer: ::core::option::Option<::bp_moonriver::AccountId>,
 						fee: runtime_types::pallet_xcm_transactor::pallet::CurrencyPayment<
 							runtime_types::moonriver_runtime::xcm_config::CurrencyId,
 						>,
@@ -7143,7 +7145,7 @@ pub mod api {
 				pub enum Event {
 					#[codec(index = 0)]
                     TransactedDerivative {
-                        account_id: ::bp_moonbeam::AccountId,
+                        account_id: ::bp_moonriver::AccountId,
                         dest: runtime_types::staging_xcm::v4::location::Location,
                         call: ::subxt::ext::subxt_core::alloc::vec::Vec<
                             ::core::primitive::u8,
@@ -7152,7 +7154,7 @@ pub mod api {
                     },
                     #[codec(index = 1)]
                     TransactedSovereign {
-                        fee_payer: ::core::option::Option<::bp_moonbeam::AccountId>,
+                        fee_payer: ::core::option::Option<::bp_moonriver::AccountId>,
                         dest: runtime_types::staging_xcm::v4::location::Location,
                         call: ::subxt::ext::subxt_core::alloc::vec::Vec<
                             ::core::primitive::u8,
@@ -7160,7 +7162,7 @@ pub mod api {
                     },
                     #[codec(index = 2)]
                     TransactedSigned {
-                        fee_payer: ::bp_moonbeam::AccountId,
+                        fee_payer: ::bp_moonriver::AccountId,
                         dest: runtime_types::staging_xcm::v4::location::Location,
                         call: ::subxt::ext::subxt_core::alloc::vec::Vec<
                             ::core::primitive::u8,
@@ -7168,7 +7170,7 @@ pub mod api {
                     },
                     #[codec(index = 3)]
                     RegisteredDerivative {
-                        account_id: ::bp_moonbeam::AccountId,
+                        account_id: ::bp_moonriver::AccountId,
                         index: ::core::primitive::u16,
                     },
                     #[codec(index = 4)]

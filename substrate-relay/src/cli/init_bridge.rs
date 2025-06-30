@@ -165,7 +165,6 @@ impl BridgeInitializer
 	}
 }
 
-
 impl BridgeInitializer for PolkadotToMoonriverCliBridge {
 	type Engine = GrandpaFinalityEngine<Self::Source>;
 
@@ -191,7 +190,6 @@ impl BridgeInitializer
 		)
 	}
 }
-
 
 impl BridgeInitializer for KusamaToMoonbeamCliBridge {
 	type Engine = GrandpaFinalityEngine<Self::Source>;

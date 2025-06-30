@@ -93,6 +93,7 @@ bp-moonbeam = { path = "./chains/chain-moonbeam" }
 bp-runtime = { git = "https://github.com/paritytech/polkadot-sdk", branch = "master" }
 bridge-runtime-common = { git = "https://github.com/paritytech/polkadot-sdk", branch = "master" }
 relay-substrate-client = { git = "https://github.com/paritytech/polkadot-sdk", branch = "master" }
+sp-io = { git = "https://github.com/paritytech/polkadot-sdk", branch = "master" }
 sp-core = { git = "https://github.com/paritytech/polkadot-sdk", branch = "master" }
 sp-runtime = { git = "https://github.com/paritytech/polkadot-sdk", branch = "master" }
 sp-weights = { git = "https://github.com/paritytech/polkadot-sdk", branch = "master" }

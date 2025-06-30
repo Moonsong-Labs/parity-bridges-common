@@ -42,7 +42,7 @@ impl SubstrateMessageLane for MoonbeamMessagesToMoonriverMessageLane {
 	type SourceChain = Moonbeam;
 	type TargetChain = Moonriver;
 
-	type LaneId = bp_messages::LegacyLaneId;
+	type LaneId = bp_messages::HashedLaneId;
 
 	type ReceiveMessagesProofCallBuilder =
 		MoonbeamMessagesToMoonriverMessageLaneReceiveMessagesProofCallBuilder;

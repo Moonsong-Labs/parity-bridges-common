@@ -93,7 +93,7 @@ pub const WITH_MOONBEAM_POLKADOT_MESSAGES_PALLET_NAME: &str = "BridgePolkadotMes
 pub const WITH_MOONBEAM_POLKADOT_RELAYERS_PALLET_NAME: &str = "BridgeRelayers";
 
 /// Bridge lane identifier.
-pub type LaneId = bp_messages::LegacyLaneId;
+pub type LaneId = bp_messages::HashedLaneId;
 
 decl_bridge_finality_runtime_apis!(moonbeam_polkadot);
 decl_bridge_messages_runtime_apis!(moonbeam_polkadot, LaneId);
