@@ -18,6 +18,8 @@ use crate::bridges::{
 	kusama_polkadot::{
 		bridge_hub_kusama_parachains_to_bridge_hub_polkadot::BridgeHubKusamaToBridgeHubPolkadotCliBridge,
 		bridge_hub_polkadot_parachains_to_bridge_hub_kusama::BridgeHubPolkadotToBridgeHubKusamaCliBridge,
+		kusama_parachains_to_moonbeam_polkadot::MoonriverToMoonbeamCliBridge,
+		polkadot_parachains_to_moonriver_kusama::MoonbeamToMoonriverCliBridge,
 	},
 	polkadot_bulletin::polkadot_parachains_to_polkadot_bulletin::PolkadotToPolkadotBulletinCliBridge,
 	rococo_bulletin::rococo_parachains_to_rococo_bulletin::RococoToRococoBulletinCliBridge,
@@ -66,6 +68,8 @@ pub enum RelayParachainsBridge {
 	BridgeHubWestendToBridgeHubRococo,
 	AssetHubRococoToBridgeHubWestend,
 	AssetHubWestendToBridgeHubRococo,
+	MoonbeamToMoonriver,
+	MoonriverToMoonbeam,
 }
 
 impl ParachainsRelayer for BridgeHubRococoToBridgeHubWestendCliBridge {}
@@ -76,6 +80,8 @@ impl ParachainsRelayer for BridgeHubKusamaToBridgeHubPolkadotCliBridge {}
 impl ParachainsRelayer for BridgeHubPolkadotToBridgeHubKusamaCliBridge {}
 impl ParachainsRelayer for PolkadotToPolkadotBulletinCliBridge {}
 impl ParachainsRelayer for RococoToRococoBulletinCliBridge {}
+impl ParachainsRelayer for MoonbeamToMoonriverCliBridge {}
+impl ParachainsRelayer for MoonriverToMoonbeamCliBridge {}
 
 impl RelayParachains {
 	/// Run the command.
@@ -97,6 +103,10 @@ impl RelayParachains {
 				PolkadotToPolkadotBulletinCliBridge::relay_parachains(self.params),
 			RelayParachainsBridge::RococoToRococoBulletin =>
 				RococoToRococoBulletinCliBridge::relay_parachains(self.params),
+			RelayParachainsBridge::MoonbeamToMoonriver =>
+				MoonbeamToMoonriverCliBridge::relay_parachains(self.params),
+			RelayParachainsBridge::MoonriverToMoonbeam =>
+				MoonriverToMoonbeamCliBridge::relay_parachains(self.params),
 		}
 		.await
 	}
@@ -126,6 +136,10 @@ impl RelayParachainHead {
 				PolkadotToPolkadotBulletinCliBridge::relay_parachain_head(self.params),
 			RelayParachainsBridge::RococoToRococoBulletin =>
 				RococoToRococoBulletinCliBridge::relay_parachain_head(self.params),
+			RelayParachainsBridge::MoonbeamToMoonriver =>
+				MoonbeamToMoonriverCliBridge::relay_parachain_head(self.params),
+			RelayParachainsBridge::MoonriverToMoonbeam =>
+				MoonriverToMoonbeamCliBridge::relay_parachain_head(self.params),
 		}
 		.await
 	}

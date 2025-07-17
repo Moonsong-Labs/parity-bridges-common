@@ -21,6 +21,8 @@ use crate::bridges::{
 	kusama_polkadot::{
 		bridge_hub_kusama_messages_to_bridge_hub_polkadot::BridgeHubKusamaToBridgeHubPolkadotMessagesCliBridge,
 		bridge_hub_polkadot_messages_to_bridge_hub_kusama::BridgeHubPolkadotToBridgeHubKusamaMessagesCliBridge,
+		moonbeam_polkadot_messages_to_moonriver_kusama::MoonbeamToMoonriverMessagesCliBridge,
+		moonriver_kusama_messages_to_moonbeam_polkadot::MoonriverToMoonbeamMessagesCliBridge,
 	},
 	polkadot_bulletin::{
 		bridge_hub_polkadot_messages_to_polkadot_bulletin::BridgeHubPolkadotToPolkadotBulletinMessagesCliBridge,
@@ -56,6 +58,8 @@ pub enum FullBridge {
 	BridgeHubRococoToRococoBulletin,
 	AssetHubRococoToBridgeHubWestend,
 	AssetHubWestendToBridgeHubRococo,
+	MoonbeamToMoonriver,
+	MoonriverToMoonbeam,
 }
 
 /// Start messages relayer process.
@@ -98,6 +102,8 @@ impl MessagesRelayer for RococoBulletinToBridgeHubRococoMessagesCliBridge {}
 impl MessagesRelayer for BridgeHubRococoToRococoBulletinMessagesCliBridge {}
 impl MessagesRelayer for AssetHubRococoToAssetHubWestendMessagesCliBridge {}
 impl MessagesRelayer for AssetHubWestendToAssetHubRococoMessagesCliBridge {}
+impl MessagesRelayer for MoonbeamToMoonriverMessagesCliBridge {}
+impl MessagesRelayer for MoonriverToMoonbeamMessagesCliBridge {}
 
 impl RelayMessages {
 	/// Run the command.
@@ -123,6 +129,10 @@ impl RelayMessages {
 				AssetHubRococoToAssetHubWestendMessagesCliBridge::relay_messages(self.params),
 			FullBridge::AssetHubWestendToBridgeHubRococo =>
 				AssetHubWestendToAssetHubRococoMessagesCliBridge::relay_messages(self.params),
+			FullBridge::MoonbeamToMoonriver =>
+				MoonbeamToMoonriverMessagesCliBridge::relay_messages(self.params),
+			FullBridge::MoonriverToMoonbeam =>
+				MoonriverToMoonbeamMessagesCliBridge::relay_messages(self.params),
 		}
 		.await
 	}
@@ -164,6 +174,10 @@ impl RelayMessagesRange {
 				AssetHubRococoToAssetHubWestendMessagesCliBridge::relay_messages_range(self.params),
 			FullBridge::AssetHubWestendToBridgeHubRococo =>
 				AssetHubWestendToAssetHubRococoMessagesCliBridge::relay_messages_range(self.params),
+			FullBridge::MoonbeamToMoonriver =>
+				MoonbeamToMoonriverMessagesCliBridge::relay_messages_range(self.params),
+			FullBridge::MoonriverToMoonbeam =>
+				MoonriverToMoonbeamMessagesCliBridge::relay_messages_range(self.params),
 		}
 		.await
 	}
@@ -205,6 +219,10 @@ impl RelayMessagesDeliveryConfirmation {
 				AssetHubRococoToAssetHubWestendMessagesCliBridge::relay_messages_delivery_confirmation(self.params),
 			FullBridge::AssetHubWestendToBridgeHubRococo =>
 				AssetHubWestendToAssetHubRococoMessagesCliBridge::relay_messages_delivery_confirmation(self.params),
+			FullBridge::MoonbeamToMoonriver =>
+				MoonbeamToMoonriverMessagesCliBridge::relay_messages_delivery_confirmation(self.params),
+			FullBridge::MoonriverToMoonbeam =>
+				MoonriverToMoonbeamMessagesCliBridge::relay_messages_delivery_confirmation(self.params),
 		}
 		.await
 	}

@@ -18,7 +18,23 @@
 
 use relay_moonbeam_client::Moonbeam;
 use relay_moonriver_client::Moonriver;
-use substrate_relay_helper::{messages::SubstrateMessageLane, UtilityPalletBatchCallBuilder};
+use substrate_relay_helper::{
+	cli::bridge::{CliBridgeBase, MessagesCliBridge},
+	messages::SubstrateMessageLane,
+	UtilityPalletBatchCallBuilder,
+};
+
+/// Moonriver-to-Moonbeam messages bridge.
+pub struct MoonriverToMoonbeamMessagesCliBridge {}
+
+impl CliBridgeBase for MoonriverToMoonbeamMessagesCliBridge {
+	type Source = Moonriver;
+	type Target = Moonbeam;
+}
+
+impl MessagesCliBridge for MoonriverToMoonbeamMessagesCliBridge {
+	type MessagesLane = MoonriverMessagesToMoonbeamMessageLane;
+}
 
 substrate_relay_helper::generate_receive_message_proof_call_builder!(
 	MoonriverMessagesToMoonbeamMessageLane,

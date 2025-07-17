@@ -20,7 +20,9 @@ use strum::{EnumString, VariantNames};
 use crate::bridges::{
 	kusama_polkadot::{
 		kusama_headers_to_bridge_hub_polkadot::KusamaToBridgeHubPolkadotCliBridge,
+		kusama_headers_to_moonbeam::KusamaToMoonbeamCliBridge,
 		polkadot_headers_to_bridge_hub_kusama::PolkadotToBridgeHubKusamaCliBridge,
+		polkadot_headers_to_moonriver::PolkadotToMoonriverCliBridge,
 	},
 	polkadot_bulletin::{
 		polkadot_bulletin_headers_to_bridge_hub_polkadot::PolkadotBulletinToBridgeHubPolkadotCliBridge,
@@ -72,6 +74,8 @@ pub enum RelayHeadersBridge {
 	PolkadotBulletinToBridgeHubPolkadot,
 	RococoToRococoBulletin,
 	RococoBulletinToBridgeHubRococo,
+	PolkadotToMoonriver,
+	KusamaToMoonbeam,
 }
 
 impl HeadersRelayer for RococoToBridgeHubWestendCliBridge {}
@@ -82,6 +86,8 @@ impl HeadersRelayer for PolkadotToPolkadotBulletinCliBridge {}
 impl HeadersRelayer for PolkadotBulletinToBridgeHubPolkadotCliBridge {}
 impl HeadersRelayer for RococoToRococoBulletinCliBridge {}
 impl HeadersRelayer for RococoBulletinToBridgeHubRococoCliBridge {}
+impl HeadersRelayer for PolkadotToMoonriverCliBridge {}
+impl HeadersRelayer for KusamaToMoonbeamCliBridge {}
 
 impl RelayHeaders {
 	/// Run the command.
@@ -103,6 +109,10 @@ impl RelayHeaders {
 				RococoToRococoBulletinCliBridge::relay_headers(self.params),
 			RelayHeadersBridge::RococoBulletinToBridgeHubRococo =>
 				RococoBulletinToBridgeHubRococoCliBridge::relay_headers(self.params),
+			RelayHeadersBridge::PolkadotToMoonriver =>
+				PolkadotToMoonriverCliBridge::relay_headers(self.params),
+			RelayHeadersBridge::KusamaToMoonbeam =>
+				PolkadotToMoonriverCliBridge::relay_headers(self.params),
 		}
 		.await
 	}
@@ -128,6 +138,10 @@ impl RelayHeader {
 				RococoToRococoBulletinCliBridge::relay_header(self.params),
 			RelayHeadersBridge::RococoBulletinToBridgeHubRococo =>
 				RococoBulletinToBridgeHubRococoCliBridge::relay_header(self.params),
+			RelayHeadersBridge::PolkadotToMoonriver =>
+				PolkadotToMoonriverCliBridge::relay_header(self.params),
+			RelayHeadersBridge::KusamaToMoonbeam =>
+				PolkadotToMoonriverCliBridge::relay_header(self.params),
 		}
 		.await
 	}
