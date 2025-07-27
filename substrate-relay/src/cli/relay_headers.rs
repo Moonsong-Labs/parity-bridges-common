@@ -36,6 +36,10 @@ use crate::bridges::{
 		rococo_headers_to_bridge_hub_westend::RococoToBridgeHubWestendCliBridge,
 		westend_headers_to_bridge_hub_rococo::WestendToBridgeHubRococoCliBridge,
 	},
+	stagenet_alphanet::{
+		stagenet_relay_headers_to_betanet,
+		betanet_relay_headers_to_stagenet
+	}
 };
 
 use substrate_relay_helper::cli::relay_headers::{
@@ -76,6 +80,8 @@ pub enum RelayHeadersBridge {
 	RococoBulletinToBridgeHubRococo,
 	PolkadotToMoonriver,
 	KusamaToMoonbeam,
+	StagenetToBetanet,
+	BetanetToStagenet,
 }
 
 impl HeadersRelayer for RococoToBridgeHubWestendCliBridge {}
@@ -88,6 +94,8 @@ impl HeadersRelayer for RococoToRococoBulletinCliBridge {}
 impl HeadersRelayer for RococoBulletinToBridgeHubRococoCliBridge {}
 impl HeadersRelayer for PolkadotToMoonriverCliBridge {}
 impl HeadersRelayer for KusamaToMoonbeamCliBridge {}
+impl HeadersRelayer for betanet_relay_headers_to_stagenet::CliBridge {}
+impl HeadersRelayer for stagenet_relay_headers_to_betanet::CliBridge {}
 
 impl RelayHeaders {
 	/// Run the command.
@@ -112,7 +120,11 @@ impl RelayHeaders {
 			RelayHeadersBridge::PolkadotToMoonriver =>
 				PolkadotToMoonriverCliBridge::relay_headers(self.params),
 			RelayHeadersBridge::KusamaToMoonbeam =>
-				PolkadotToMoonriverCliBridge::relay_headers(self.params),
+				KusamaToMoonbeamCliBridge::relay_headers(self.params),
+			RelayHeadersBridge::BetanetToStagenet =>
+				betanet_relay_headers_to_stagenet::CliBridge::relay_headers(self.params),
+			RelayHeadersBridge::StagenetToBetanet =>
+				stagenet_relay_headers_to_betanet::CliBridge::relay_headers(self.params),
 		}
 		.await
 	}
@@ -141,7 +153,11 @@ impl RelayHeader {
 			RelayHeadersBridge::PolkadotToMoonriver =>
 				PolkadotToMoonriverCliBridge::relay_header(self.params),
 			RelayHeadersBridge::KusamaToMoonbeam =>
-				PolkadotToMoonriverCliBridge::relay_header(self.params),
+				KusamaToMoonbeamCliBridge::relay_header(self.params),
+			RelayHeadersBridge::BetanetToStagenet =>
+				betanet_relay_headers_to_stagenet::CliBridge::relay_header(self.params),
+			RelayHeadersBridge::StagenetToBetanet =>
+				stagenet_relay_headers_to_betanet::CliBridge::relay_header(self.params),
 		}
 		.await
 	}
